@@ -25,10 +25,10 @@ class UsersTableSeeder extends Seeder
 
         $admin_faculty = Faculty::create([
 			'faculty_id' => 1234567890,
-			'first_name' => "Apple Rose",
+			'first_name' => "John Michael",
 			'middle_name' => "D",
-			'last_name' => "Corpuz",
-			'gender' => "Female",
+			'last_name' => "Fernandez",
+			'gender' => "Male",
 			'contact_number' => "09123456789",
         ]);
 
@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
 
         $admin_user = User::create([
             'username' => 'admin',
-            'email' => 'ar.corpuz00@gmail.com',
+            'email' => 'jm.fernandez00@gmail.com',
             'password' => bcrypt('admin')
         ]);
 
