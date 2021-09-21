@@ -21,7 +21,7 @@
             <!-- /.login-logo -->
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
-                    <a href="/" class="h1">Binmaley School of Fisheries Management</a>
+                    <a href="/" class="h1">Golden West College</a>
                 </div>
                 <div class="card-body">
                     <p class="login-box-msg">Sign in to start your session</p>

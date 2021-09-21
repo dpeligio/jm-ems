@@ -52,6 +52,16 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'faculties.restore',
 		'uses' => 'FacultyController@restore'
 	]);
+
+	/**
+	 * Student
+	 */
+	Route::resource('students', 'StudentController');
+	// restore
+	Route::post('students_restore/{position}', [
+		'as' => 'students.restore',
+		'uses' => 'StudentController@restore'
+	]);
     
     /**
 	 * Users

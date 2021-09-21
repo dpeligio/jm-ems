@@ -7,7 +7,7 @@
                 <img class="img-fluid" width="280px" src="{{ asset('images/logo.png') }}" alt="">
             </div>
         </div>
-        <br>
+        {{-- <br>
         <br>
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -35,7 +35,7 @@
                     To present the interest of the student body through initiatives, programs, and services that enrich students lives.
                 </h5>
             </div>
-        </div>
+        </div> --}}
     </div>
 </section>
 @endsection
