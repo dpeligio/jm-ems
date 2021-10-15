@@ -19,6 +19,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::post('student_register', [
+	'as' => 'student_registration.register',
+	'uses' => 'StudentRegistrationController@register'
+]);
+
 Route::group(array('middleware'=>['auth']), function() {
 
     /**
@@ -67,11 +72,11 @@ Route::group(array('middleware'=>['auth']), function() {
 	 * Users
 	 */
 	Route::resource('users', 'UserController');
-	// sidebar collapase
-	/* Route::get('user_sidebar_collapse', [
-		'as' => 'users.sidebar_collapse',
-		'uses' => 'UserController@sidebar_collapse'
-	]); */
+	// validate user/student
+	Route::get('user_activate/{user}', [
+		'as' => 'users.activate',
+		'uses' => 'UserController@activate'
+	]);
 	// restore
 	Route::post('users_restore/{user}', [
 		'as' => 'users.restore',

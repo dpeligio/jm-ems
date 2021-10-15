@@ -1,4 +1,47 @@
-<!DOCTYPE html>
+@extends('layouts.adminlte')
+@section('content')
+<div class="content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-default mt-5">
+                <div class="card-header">
+                    <h3 class="card-title">Login</h3>
+                </div>
+                <form action="{{ route('login') }}" class="form-horizontal" method="POST">
+                    @csrf
+                    <div class="card-body">
+                        <div class="form-group row">
+                        <label for="inputUsername3" class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="username" class="form-control" id="inputUsername3" placeholder="Username" value="{{ old('username') }}">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                        </div>
+                        </div>
+                        <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                            <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck2">
+                            <label class="form-check-label" for="exampleCheck2">Remember me</label>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-info">Sign in</button>
+                        {{-- <button type="submit" class="btn btn-default float-right">Cancel</button> --}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+{{-- <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -69,21 +112,13 @@
                             <!-- /.col -->
                         </div>
                     </form>
-                    {{-- <div class="social-auth-links text-center mt-2 mb-3">
-                        <a href="#" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                        </a>
-                        <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                        </a>
-                    </div> --}}
                     <!-- /.social-auth-links -->
                     <p class="mb-1">
                         <a href="forgot-password.html">I forgot my password</a>
                     </p>
-                    {{-- <p class="mb-0">
-                        <a href="register.html" class="text-center">Register a new membership</a>
-                    </p> --}}
+                    <p class="mb-0">
+                        <a href="register.html" class="text-center">Register</a>
+                    </p>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -98,10 +133,6 @@
         <script src="{{ asset('AdminLTE-3.1.0/dist/js/adminlte.min.js') }}"></script>
         <script type="application/javascript">
             $(function() {
-                /*$(document).on('click', '.btn-submit-out', function() {
-                    $(this).prop('disabled', true).append(' <i class="fa fa-spinner fa-pulse"></i>');
-                    $($(this).data('submit')).submit();
-                });*/
         
                 $(document).on('submit', 'form', function(){
                     $(this).find('button[type=submit]').prop('disabled', true).append(' <i class="fa fa-spinner fa-spin fa-pulse"></i>')
@@ -109,4 +140,4 @@
             });
         </script>
     </body>
-</html>
+</html> --}}

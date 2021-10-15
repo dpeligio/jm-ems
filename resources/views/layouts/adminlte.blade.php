@@ -17,7 +17,7 @@
             $(function(){
                 @php
                     $url = explode('/', url()->current());
-                    $base_url = $url[0].'//'.$url[2].'/'.($url[3] ?? '');
+                    $base_url = $url[0].'//'.$url[2].'/'.($url[3] ?? '').(isset($url[4]) ? '/'.$url[4] : '');
                 @endphp
                 var url = '{{ $base_url }}';
                 // for sidebar menu but not for treeview submenu

@@ -33,12 +33,14 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $system_admin_user = User::create([
+            'is_verified' => 1,
             'username' => 'master',
             'email' => 'hououinkyouma.000001@gmail.com',
             'password' => bcrypt('admin')
         ]);
 
         $admin_user = User::create([
+            'is_verified' => 1,
             'username' => 'admin',
             'email' => 'jm.fernandez00@gmail.com',
             'password' => bcrypt('admin')

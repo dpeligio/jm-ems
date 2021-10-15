@@ -116,7 +116,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        if(request()->ajax()){
+            $data = [
+                'user' => $user
+            ];
+            return response()->json([
+                'modal_content' => view('users.show', $data)->render()
+            ]);
+        }else{
+            return redirect()->rotue('users.index');
+        }
+        
     }
 
     /**
@@ -165,5 +175,13 @@ class UserController extends Controller
 		$user->restore();
 		return back()->with('alert-success','Restored');
 		// return redirect()->route('users.index')->with('alert-success','User successfully restored');
-	}
+    }
+    
+    public function activate(User $user)
+    {
+        $user->update([
+            'is_verified' => 1
+        ]);
+        return redirect()->route('users.index')->with('alert-success', 'saved');
+    }
 }

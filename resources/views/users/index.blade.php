@@ -1,14 +1,6 @@
 {{-- @extends('layouts.app') --}}
 @extends('layouts.adminlte')
 @section('content')
-{{-- @if(isset($user_edit->id))
-@include('users.edit')
-@else
-@can('users.create')
-@include('users.create')
-@endcan
-@endif --}}
-{{-- Content Header (Page header) --}}
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -16,28 +8,9 @@
                 <h1 class="m-0 text-dark">Users</h1>
             </div>
             <div class="col-md-6 text-right">
-                <form action="{{ route('users.index') }}" method="GET" autocomplete="off">
-                    <div class="form-row">
-                        <div class="form-group col">
-                            <div class="input-group">
-                                @if(isset($_GET['q']))
-                                <span class="input-group-prepend">
-                                <a class="btn btn-success" href="{{ route('users.index') }}">View All</a>
-                                </span>
-                                @endif
-                                <input class="form-control" name="q" @if(isset($_GET['q'])) value="{{$_GET['q']}}" @endif>
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
-                                </div>
-                            </div>
-                        </div>
-                        @can('users.create')
-                        <div class="form-group col-2">
-                            <button class="btn btn-default text-primary" data-href="{{ route('users.create') }}" type="button" data-toggle="modal-ajax" data-target="#addUser"><i class="fa fa-plus"></i> Add</button>
-                        </div>
-                        @endcan
-                    </div>
-                </form>
+                {{-- @can('users.create')
+                    <button class="btn btn-default text-primary" data-href="{{ route('users.create') }}" type="button" data-toggle="modal-ajax" data-target="#createUser"><i class="fa fa-plus"></i> Add</button>
+                @endcan --}}
             </div>
         </div>
         {{-- /.row --}}
@@ -51,12 +24,13 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-sm">
+                    <table id="datatable" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
                                 @role('System Administrator')
                                 <th>ID</th>
                                 @endrole
+                                <th>Status</th>
                                 <th>Role</th>
                                 <th>Username</th>
                                 <th>Email</th>
@@ -73,13 +47,20 @@
                                 {{ $user->id }}
                             </td>
                             @endif
+                            <td>
+                                @if($user->is_verified == 1)
+                                <span class="badge badge-success">Verified</span>
+                                @else
+                                <span class="badge badge-warning">Under Validation</span>
+                                @endif
+                            </td>
                             <td>{{ $user->role->role->name }}</td>
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             @role('System Administrator')
                                 <td class="text-center">
                                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showUser" data-href="{{ route('users.show',$user->id) }}"><i class="fad fa-file-user fa-lg"></i></a>
-                                    <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editUser" data-href="{{ route('users.edit',$user->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+                                    {{-- <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editUser" data-href="{{ route('users.edit',$user->id) }}"><i class="fad fa-edit fa-lg"></i></a> --}}
                                     @if ($user->trashed())
                                         <a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('users.restore', $user->id) }}"><i class="fad fa-download fa-lg"></i></a>
                                     @else

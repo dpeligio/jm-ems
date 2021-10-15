@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
+use App\Models\FileAttachment;
+use App\Models\UserFileAttachment;
 
 class User extends Authenticatable
 {
@@ -22,6 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'is_verified',
         'username',
         'email',
         'password',
@@ -55,7 +58,22 @@ class User extends Authenticatable
     }
 
     public function faculty(){
-        return $this->hasOne('App\Models\userFaculty', 'user_id');
+        return $this->hasOne('App\Models\UserFaculty', 'user_id');
+    }
+
+    public function file_attachments()
+    {
+        return $this->hasMany('App\Models\UserFileAttachment', 'user_id');
+    }
+
+    public function schoolID_image()
+    {
+        foreach ($this->file_attachments as $file_attachment) {
+            if($file_attachment->file_attachment->subject == 'School ID validation'){
+                return $file_attachment->file_attachment->file_path.'/'.$file_attachment->file_attachment->file_name;
+            }
+        }
+        return "";
     }
 
 }

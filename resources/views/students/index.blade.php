@@ -48,9 +48,13 @@
                                 @endrole
                                 <td>
                                     @isset ($student->user)
-                                    <span class="text-success">Active</span>
+                                    @if($student->user->user->is_verified == 1)
+                                        <span class="badge badge-success">Verified</span>
                                     @else
-                                    <span class="text-danger">N/A</span>
+                                        <span class="badge badge-warning">Under Validation</span>
+                                    @endif
+                                    @else
+                                        <span class="text-danger">N/A</span>
                                     @endif
                                 </td>
                                 <td>{{ $student->student_id }}</td>
