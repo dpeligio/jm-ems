@@ -51,6 +51,16 @@
                             </p>
                         </a>
                     </li>
+                    @can('evaluations.index')
+                    <li class="nav-item">
+                        <a href="{{ route('evaluations.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-vote-yea"></i>
+                            <p>
+                                Evaluations
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
                     @can('students.index')
                     <li class="nav-item">
                         <a href="{{ route('students.index') }}" class="nav-link">
@@ -81,6 +91,27 @@
                         </a>
                     </li>
                     @endcan
+                    @canany('questions.index', 'questions_groups.index')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-question-circle"></i>
+                            <p>
+                                Question Mangement
+                                <i class="fas fa-angle-left right"></i>
+                                {{-- <span class="badge badge-info right">6</span> --}}
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('questions.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Questions</p>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    @endcanany
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cogs"></i>

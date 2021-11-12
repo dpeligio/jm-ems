@@ -35,7 +35,22 @@ Route::group(array('middleware'=>['auth']), function() {
 	Route::post('roles/restore/{department}', [
 		'as' => 'roles.restore',
 		'uses' => 'Configuration\RolePermission\RoleController@restore'
-    ]);
+	]);
+	
+	/**
+	 * Users
+	 */
+	Route::resource('users', 'UserController');
+	// validate user/student
+	Route::get('user_activate/{user}', [
+		'as' => 'users.activate',
+		'uses' => 'UserController@activate'
+	]);
+	// restore
+	Route::post('users_restore/{user}', [
+		'as' => 'users.restore',
+		'uses' => 'UserController@restore'
+	]);
     
     Route::resource('permissions', 'Configuration\RolePermission\PermissionController');
 	// Route::get('/permissions_get_data', 'Configuration\RolePermission\PermissionController@get_data')->name('permissions.get_data');
@@ -67,22 +82,26 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'students.restore',
 		'uses' => 'StudentController@restore'
 	]);
-    
-    /**
-	 * Users
+
+	/**
+	 * Question
 	 */
-	Route::resource('users', 'UserController');
-	// validate user/student
-	Route::get('user_activate/{user}', [
-		'as' => 'users.activate',
-		'uses' => 'UserController@activate'
-	]);
+	Route::resource('questions', 'QuestionController');
 	// restore
-	Route::post('users_restore/{user}', [
-		'as' => 'users.restore',
-		'uses' => 'UserController@restore'
+	Route::post('questions_restore/{question}', [
+		'as' => 'questions.restore',
+		'uses' => 'QuestionController@restore'
 	]);
 
+	/**
+	 * Evaluation
+	 */
+	Route::resource('evaluations', 'EvaluationController');
+	// restore
+	Route::post('evaluations_restore/{evaluation}', [
+		'as' => 'evaluations.restore',
+		'uses' => 'EvaluationController@restore'
+	]);
 	
 });
 /**	
