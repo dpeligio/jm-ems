@@ -70,7 +70,12 @@ class LoginController extends Controller
                     return redirect()->route('admin.home');
                 }
             } */
-            return redirect()->route('home');
+            if(Auth::user()->hasrole('System Administrator')){
+
+                return redirect()->route('home');
+            }elseif(Auth::user()->hasrole('Faculty')){
+                return redirect()->route('evaluations.index');
+            }
         }else{
             $user = User::where([
                 ['is_verified', '=', 0],

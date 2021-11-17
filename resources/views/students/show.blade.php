@@ -2,7 +2,7 @@
 	<div class="modal-dialog modal-lg modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
-	          <h4 class="modal-title">{{ $student_show->getStudentName($student_show->id) }}</h4>
+	          <h4 class="modal-title">{{ $student_show->getName() }}</h4>
 	          <button type="button" class="close" data-dismiss="modal-ajax" aria-hidden="true">&times;</button>
 	    	</div>
 			<div class="modal-body">
@@ -12,8 +12,7 @@
                         {{ $student_show->student_id }}
                         <br>
                         <label>Year/Section: </label>
-                        {{ $student_show->section->year_level }}
-                        {{ $student_show->section->name }}
+                        {{ $student_show->year_level }}
                         <br>
                         <label>First Name: </label>
                         {{ $student_show->first_name }}
@@ -23,6 +22,9 @@
                         <br>
                         <label>Last Name: </label>
                         {{ $student_show->last_name }}
+                        <br>
+                        <label>Suffix: </label>
+                        {{ $student_show->suffix }}
                         <br>
                         <label>Gender: </label>
                         {{ $student_show->gender }}
@@ -36,7 +38,11 @@
                     <div class="col-md-6">
                         <label>Account Status: </label>
                         @isset ($student_show->user)
-                        <span class="text-success">Active</span>
+                        @if($student_show->user->user->is_verified == 1)
+                            <span class="badge badge-success">Verified</span>
+                        @else
+                            <span class="badge badge-warning">Under Validation</span>
+                        @endif
                         <br>
                         <label>Username #: </label>
                         {{ $student_show->user->user->username }}
@@ -57,7 +63,7 @@
                             <input type="hidden" name="type" value="student">
                             <input type="hidden" name="user_id" value="{{ $student_show->id }}">
                             <div id="userCredentials">
-                                <label>Role:</label><br>
+                                {{-- <label>Role:</label><br>
                                 <select class="form-control select2" name="role" required>
                                     <option></option>
                                     @foreach ($roles as $role)
@@ -65,7 +71,7 @@
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 <div class="form-group">
                                     <label>Username:</label><br>
                                     <input class="form-control" type="text" name="username" required>

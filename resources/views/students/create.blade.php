@@ -13,35 +13,31 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Student ID:</label><br>
+                                <label>Student ID: <strong class="text-danger">*</strong></label><br>
                                 <input class="form-control" type="text" name="student_id" required>
                             </div>
                             <div class="form-group">
-                                <label>Year/Section:</label><br>
-                                <select class="form-control select2" name="section" required>
-                                    <option></option>
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}">
-                                            {{ $section->year_level }}
-                                            {{ $section->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label>Year Level: <strong class="text-danger">*</strong></label><br>
+                                <input type="number" class="form-control" name="year_level">
                             </div>
                             <div class="form-group">
-                                <label>First Name:</label><br>
+                                <label class="required">First Name: <strong class="text-danger">*</strong></label><br>
                                 <input class="form-control" type="text" name="first_name" required>
                             </div>
                             <div class="form-group">
                                 <label>Middle Name:</label><br>
-                                <input class="form-control" type="text" name="middle_name" required>
+                                <input class="form-control" type="text" name="middle_name">
                             </div>
                             <div class="form-group">
-                                <label>Last Name:</label><br>
+                                <label>Last Name: <strong class="text-danger">*</strong></label><br>
                                 <input class="form-control" type="text" name="last_name" required>
                             </div>
                             <div class="form-group">
-                                <label>Gender:</label><br>
+                                <label>Suffix:</label><br>
+                                <input class="form-control" type="text" name="suffix">
+                            </div>
+                            <div class="form-group">
+                                <label>Gender: <strong class="text-danger">*</strong></label><br>
                                 <div class="form-row">
                                     <div class="radio col-md-4">
                                         <div class="custom-control custom-radio">
@@ -76,7 +72,7 @@
                                 </div>
                             </div>
                             <div id="userCredentials">
-                                <label>Role:</label><br>
+                                {{-- <label>Role: <strong class="text-danger">*</strong></label><br>
                                 <select class="form-control select2" name="role" required>
                                     <option></option>
                                     @foreach ($roles as $role)
@@ -84,21 +80,21 @@
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 <div class="form-group">
-                                    <label>Username:</label><br>
+                                    <label>Username: <strong class="text-danger">*</strong></label><br>
                                     <input class="form-control" type="text" name="username" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Email:</label><br>
+                                    <label>Email: <strong class="text-danger">*</strong></label><br>
                                     <input class="form-control" type="email" name="email" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Password:</label><br>
+                                    <label>Password: <strong class="text-danger">*</strong></label><br>
                                     <input id="password" type="password" class="form-control" name="password" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Confirm Password:</label><br>
+                                    <label>Confirm Password: <strong class="text-danger">*</strong></label><br>
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                                 </div>
                             </div>

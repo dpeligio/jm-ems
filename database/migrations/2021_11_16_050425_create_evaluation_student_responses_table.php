@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEvaluationStudentReponsesTable extends Migration
+class CreateEvaluationStudentResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateEvaluationStudentReponsesTable extends Migration
      */
     public function up()
     {
-        Schema::create('evaluation_student_reponses', function (Blueprint $table) {
+        Schema::create('evaluation_student_responses', function (Blueprint $table) {
             $table->bigIncrements('id');
             // $table->unsignedBigInteger('evaluator_id');
-            // $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('evaluation_student_id');
             $table->text('question');
             $table->enum('answer', ['strongly agree', 'agree', 'disagree', 'strongly disagree']);
@@ -46,6 +46,6 @@ class CreateEvaluationStudentReponsesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evaluation_student_reponses');
+        Schema::dropIfExists('evaluation_student_responses');
     }
 }

@@ -32,6 +32,7 @@
                                 @endrole
                                 <th>Status</th>
                                 <th>Role</th>
+                                <th>Name</th>
                                 <th>Username</th>
                                 <th>Email</th>
                                 @role('System Administrator')
@@ -55,6 +56,13 @@
                                 @endif
                             </td>
                             <td>{{ $user->role->role->name }}</td>
+                            <td>
+                                @isset($user->student->student)
+                                    {{ $user->student->student->fullname('f-m-l') }}
+                                @else
+                                    {{ $user->faculty->faculty->fullname('f-m-l') }}
+                                @endif
+                            </td>
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             @role('System Administrator')

@@ -23,4 +23,17 @@
     -moz-animation-direction: normal;
     -o-animation-direction: normal;
     animation-direction: normal; */
-  }
+}
+.small-box .icon > img {
+  width: 90px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  transition: -webkit-transform 0.3s linear;
+  transition: transform 0.3s linear;
+  transition: transform 0.3s linear, -webkit-transform 0.3s linear;
+}
+.small-box:hover .icon > img {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}

@@ -85,8 +85,8 @@ class StudentController extends Controller
         $request->validate([
 			'student_id' => ['required', 'unique:students,student_id'],
 			'first_name' => 'required',
-			'middle_name' => 'required',
 			'last_name' => 'required',
+			'year_level' => 'required',
             'gender' => 'required',
             'contact_number' => ['unique:students,contact_number']
         ]);
@@ -96,15 +96,16 @@ class StudentController extends Controller
 			'first_name' => $request->get('first_name'),
 			'middle_name' => $request->get('middle_name'),
 			'last_name' => $request->get('last_name'),
+			'year_level' => $request->get('year_level'),
 			'gender' => $request->get('gender'),
 			'contact_number' => $request->get('contact_number'),
 			'address' => $request->get('address'),
         ]);
 
-        StudentSection::create([
+        /* StudentSection::create([
             'section_id' => $request->get('section'),
             'student_id' => $student->id
-        ]);
+        ]); */
         
         if($request->get('add_user_account')){
             $request->validate([
@@ -120,7 +121,7 @@ class StudentController extends Controller
                 'password' => Hash::make($request->get('password'))
             ]);
 
-            $user->assignRole($request->get('role'));
+            $user->assignRole(4);
 
             UserStudent::create([
                 'user_id' => $user->id,
@@ -145,17 +146,17 @@ class StudentController extends Controller
                 'student_show' => $student,
             ]);
         }else{
-            $roles = Role::select('*');
+            /* $roles = Role::select('*');
             if(Auth::user()->hasrole('System Administrator')){
                 $roles = $roles;
             }elseif(Auth::user()->hasrole('Administrator')){
                 $roles->where('id', '!=', 1)->get();
             }else{
                 $roles->whereNotIn('id', [1,2]);
-            }
+            } */
             $data = ([
                 'student_show' => $student,
-                'roles' => $roles->get(),
+                // 'roles' => $roles->get(),
             ]);
         }
 
@@ -183,8 +184,8 @@ class StudentController extends Controller
         }
         $data = ([
             'student_edit' => $student,
-			'roles' => $roles->get(),
-			'sections' => Section::get()
+			// 'roles' => $roles->get(),
+			// 'sections' => Section::get()
         ]);
         
         return response()->json([
@@ -203,8 +204,8 @@ class StudentController extends Controller
     {
         $request->validate([
 			'student_id' => ['required', 'unique:students,student_id,'.$student->id],
+			'year_level' => 'required',
 			'first_name' => 'required',
-			'middle_name' => 'required',
 			'last_name' => 'required',
             'gender' => 'required',
             'contact_number' => ['unique:students,contact_number,'.$student->id]
@@ -212,17 +213,19 @@ class StudentController extends Controller
 
 		$student->update([
 			'student_id' => $request->get('student_id'),
+			'year_level' => $request->get('year_level'),
 			'first_name' => $request->get('first_name'),
 			'middle_name' => $request->get('middle_name'),
 			'last_name' => $request->get('last_name'),
+			'suffix' => $request->get('suffix'),
 			'gender' => $request->get('gender'),
 			'contact_number' => $request->get('contact_number'),
 			'address' => $request->get('address'),
         ]);
 
-        $student->section->update([
+        /* $student->section->update([
             'section_id' => $request->get('section')
-        ]);
+        ]); */
 
         return back()->with('alert-success', 'Saved');
     }

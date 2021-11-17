@@ -112,6 +112,7 @@
                         </ul>
                     </li>
                     @endcanany
+                    @canany('roles.index', 'permission.index')
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cogs"></i>
@@ -122,15 +123,17 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+                            @can('roles.index')
                             <li class="nav-item">
                                 <a href="{{ route('roles.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Roles/Permissions</p>
                                 </a>
                             </li>
-                            
+                            @endcan
                         </ul>
                     </li>
+                    @endcanany
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                             <i class="nav-icon fas fa-sign-out"></i>

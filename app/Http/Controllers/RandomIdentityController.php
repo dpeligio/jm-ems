@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Student;
 use App\Models\Section;
 use App\Models\StudentSection;
 use App\Models\Faculty;
+use App\Models\User;
+use App\Models\UserStudent;
+use App\Models\UserFaculty;
 use Carbon\Carbon;
 
 class RandomIdentityController extends Controller
@@ -15,10 +19,6 @@ class RandomIdentityController extends Controller
 	{
 		$count = $request->number;
 		$date_now = Carbon::now()->toDateTimeString();
-
-		if($request->date_created != null){
-			$date_now = $request->get('date_created');
-		}
 		
 		// $bar = $this->output->createProgressBar(count($count));
 		for ($i=0; $i < $count; $i++) {
@@ -26,14 +26,20 @@ class RandomIdentityController extends Controller
 			$middle_name = $this->lname();
 			list($brgy, $city, $province) = $this->address();
 			list($sex, $fname) = $this->fname();
+			$bdate = $this->bdate();
+			$studentID = $this->student_id();
+			$contactNumber = $this->phone();
+
 			$student = Student::create([
-				'student_id' => $this->student_id(),
+				'student_id' => $studentID,
+				'year_level' => is_null($request->get('year_level')) ? rand(1,4) : $request->get('year_level'),
 				'first_name' => $fname,
 				'middle_name' => $middle_name,
 				'last_name' => $last_name,
 				'gender' => $sex,
-				'contact_number' => $this->phone(),
-				'address' => $brgy . ', ' . $city . ', ' . $province
+				'birth_date' => $bdate,
+				'contact_number' => $contactNumber,
+				'address' => ($brgy == '' ? '' : $brgy . ', ') . $city . ', ' . $province
 			]);
 			
 			$section = Section::inRandomOrder()->first();
@@ -41,6 +47,22 @@ class RandomIdentityController extends Controller
 				'student_id' => $student->id,
 				'section_id' => $section->id
 			]);
+
+			if($request->get('add_account') == 'add_account'){
+				// $email = $this->email($student->first_name, $last_name, $student->student_id);
+				$user = User::create([
+					'is_verified' => is_null($request->get('verified')) ? 0 : 1,
+					'username' => $student->student_id,
+					'email' => $student->student_id.'@gmail.com',
+					'password' => Hash::make('asdasd')
+				]);
+	
+				$user->assignRole(4);
+				UserStudent::create([
+					'user_id' => $user->id,
+					'student_id' => $student->id
+				]);
+			}
 
 
 		}
@@ -66,7 +88,7 @@ class RandomIdentityController extends Controller
 			$mname = $this->lname();
 
 			$bdate = $this->bdate();
-			Faculty::create([
+			$faculty = Faculty::create([
 				'faculty_id' => $this->student_id(),
 				'first_name' => $fname,
 				'middle_name' => $mname,
@@ -76,6 +98,21 @@ class RandomIdentityController extends Controller
 				'address' => $brgy . ', ' . $city . ', ' . $province
 			]);
 
+			if($request->get('add_account') == 'add_account'){
+				// $email = $this->email($student->first_name, $last_name, $student->student_id);
+				$user = User::create([
+					'is_verified' => 1,
+					'username' => $faculty->faculty_id,
+					'email' => $faculty->faculty_id.'@gmail.com',
+					'password' => Hash::make('asdasd')
+				]);
+	
+				$user->assignRole(3);
+				UserFaculty::create([
+					'user_id' => $user->id,
+					'faculty_id' => $faculty->id
+				]);
+			}
 		}
 
 		return back();

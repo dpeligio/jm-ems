@@ -32,7 +32,7 @@ Route::group(array('middleware'=>['auth']), function() {
     Route::resource('roles', 'Configuration\RolePermission\RoleController');
 	// Route::get('/roles_get_data', 'Configuration\RolePermission\RoleController@get_data')->name('roles.get_data');
 	// restore
-	Route::post('roles/restore/{department}', [
+	Route::post('roles/restore/{role}', [
 		'as' => 'roles.restore',
 		'uses' => 'Configuration\RolePermission\RoleController@restore'
 	]);
@@ -102,6 +102,16 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'evaluations.restore',
 		'uses' => 'EvaluationController@restore'
 	]);
+
+	/**
+	 * Evaluation Student
+	 */
+	Route::resource('evaluation_students', 'EvaluationStudentController');
+	// restore
+	/* Route::post('evaluation_students_restore/{evaluationStudent}', [
+		'as' => 'evaluation_students.restore',
+		'uses' => 'EvaluationStudentController@restore'
+	]); */
 	
 });
 /**	

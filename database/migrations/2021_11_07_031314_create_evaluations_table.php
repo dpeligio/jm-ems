@@ -15,9 +15,8 @@ class CreateEvaluationsTable extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
             $table->enum('status', ['incoming','ongoing','ended']);
-            $table->unsignedBigInteger('faculty_id');
+            $table->string('title')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->text('description')->nullable();
@@ -26,12 +25,6 @@ class CreateEvaluationsTable extends Migration
 			$table->unsignedBigInteger('deleted_by')->nullable();
 			$table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('faculty_id')
-                ->references('id')
-                ->on('faculties')
-				->onDelete('cascade')
-                ->onUpdate('cascade');
         });
     }
 

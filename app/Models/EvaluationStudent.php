@@ -14,15 +14,15 @@ class EvaluationStudent extends Model
     protected $table = 'evaluation_students';
 
     protected $fillable = [
-        'evaluation_id',
+        'evaluation_faculty_id',
         'student_id',
         'positive_comments',
         'negative_comments',
     ];
 
-    public function evaluation()
+    public function evaluationFaculty()
     {
-        return $this->belongsTo('App\Models\Evaluation', 'evaluation_id');
+        return $this->belongsTo('App\Models\EvaluationFaculty', 'evaluation_faculty_id');
     }
 
     public function student()
@@ -32,6 +32,7 @@ class EvaluationStudent extends Model
 
     public function evaluationStudentReponses()
     {
-        return $this->belongsTo('App\Models\EvaluationStudentReponse', 'evaluation_student_id');
+        return $this->hasMany('App\Models\EvaluationStudentResponse', 'evaluation_student_id');
     }
+
 }

@@ -18,16 +18,8 @@
                                 <input class="form-control" type="text" name="student_id" required value="{{ $student_edit->student_id }}">
                             </div>
                             <div class="form-group">
-                                <label>Year/Section:</label><br>
-                                <select class="form-control select2" name="section" required>
-                                    <option></option>
-                                    @foreach ($sections as $section)
-                                        <option value="{{ $section->id }}" @if($student_edit->section->section_id == $section->id) selected @endif>
-                                            {{ $section->year_level }}
-                                            {{ $section->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label>Year Level: <strong class="text-danger">*</strong></label><br>
+                                <input type="number" class="form-control" name="year_level" required value="{{ $student_edit->year_level }}">
                             </div>
                             <div class="form-group">
                                 <label>First Name:</label><br>
@@ -40,6 +32,10 @@
                             <div class="form-group">
                                 <label>Last Name:</label><br>
                                 <input class="form-control" type="text" name="last_name" value="{{ $student_edit->first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Suffix:</label><br>
+                                <input class="form-control" type="text" name="suffix" value="{{ $student_edit->suffix }}">
                             </div>
                             <div class="form-group">
                                 <label>Gender:</label><br>

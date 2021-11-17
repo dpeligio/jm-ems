@@ -25,23 +25,35 @@
                                 <th>ID</th>
                                 @endrole
                                 <th>Status</th>
-                                <th>Evaluation</th>
+                                <th>Title</th>
+                                <th>Faculty</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 @role('System Administrator')
                                 <th class="text-center">Action</th>
                                 @endrole
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($evaluations as $evaluation)
+                            @forelse ($evaluations as $evaluation)
                             <tr @unlessrole('System Administrator') @can('evaluations.show') data-toggle="modal-ajax" data-target="#showEvaluation" data-href="{{ route('evaluations.show', $evaluation->id) }}"  @endcan @else class="{{ $evaluation->trashed() ? 'table-danger' : '' }}" @endunlessrole>
                                 @role('System Administrator')
                                 <td>{{ $evaluation->id }}</td>
                                 @endrole
-                                <td>{{ $evaluation->status }}</td>
-                                <td>{{ $evaluation->evaluation }}</td>
+                                <td>{{ $evaluation->getStatus() }}</td>
+                                <td>{{ $evaluation->title }}</td>
+                                <td>
+                                    @forelse($evaluation->evaluationFaculties as $faculty)
+                                    {{ $faculty->faculty->getFacultyName() }}@if(!$loop->last), @endif
+                                    @empty
+                                    *** EMPTY ***
+                                    @endforelse
+                                </td>
+                                <td>{{ date('F d, Y h:iA', strtotime($evaluation->start_date)) }}</td>
+                                <td>{{ date('F d, Y h:iA', strtotime($evaluation->end_date)) }}</td>
                                 @role('System Administrator')
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showEvaluation" data-href="{{ route('evaluations.show',$evaluation->id) }}"><i class="fad fa-file fa-lg"></i></a>
+                                        <a href="{{ route('evaluations.show',$evaluation->id) }}"><i class="fad fa-file fa-lg"></i></a>
                                         {{-- <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editEvaluation" data-href="{{ route('evaluations.edit',$evaluation->id) }}"><i class="fad fa-edit fa-lg"></i></a> --}}
                                         @if ($evaluation->trashed())
                                             <a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('evaluations.restore', $evaluation->id) }}"><i class="fad fa-download fa-lg"></i></a>
@@ -51,7 +63,11 @@
                                     </td>
                                 @endrole
                             </tr>
-                            @endforeach
+                            @empty
+                            {{-- <tr>
+                                <td class="text-center text-danger" colspan="8">*** EMPTY ***</td>
+                            </tr> --}}
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

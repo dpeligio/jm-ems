@@ -87,6 +87,22 @@
                                         <label>Number of Facultys: </label>
                                         <input class="form-control" type="number" name="number" max="15000" min="1" value="1">
                                     </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" name="add_account" value="add_account" id="addAccount" checked>
+                                                <label class="custom-control-label" for="addAccount">Add User Account</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" name="verified" value="1" id="verified" checked>
+                                                <label class="custom-control-label" for="verified">Verified</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <hr>
                                     <button type="submit" class="btn btn-danger">Submit</button>					
                                 </form>

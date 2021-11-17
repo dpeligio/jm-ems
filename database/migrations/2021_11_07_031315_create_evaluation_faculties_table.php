@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEvaluationStudentsTable extends Migration
+class CreateEvaluationFacultiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,24 @@ class CreateEvaluationStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('evaluation_students', function (Blueprint $table) {
+        Schema::create('evaluation_faculties', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('evaluation_faculty_id');
-            $table->unsignedBigInteger('student_id');
-            $table->text('positive_comments')->nullable();
-            $table->text('negative_comments')->nullable();
+            $table->unsignedBigInteger('evaluation_id');
+            $table->unsignedBigInteger('faculty_id');
             $table->unsignedBigInteger('created_by')->nullable();
 			$table->unsignedBigInteger('updated_by')->nullable();
 			$table->unsignedBigInteger('deleted_by')->nullable();
 			$table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('evaluation_faculty_id')
+            $table->foreign('evaluation_id')
                 ->references('id')
-                ->on('evaluation_faculties')
+                ->on('evaluations')
 				->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->foreign('student_id')
+            $table->foreign('faculty_id')
                 ->references('id')
-                ->on('students')
+                ->on('faculties')
 				->onDelete('cascade')
                 ->onUpdate('cascade');
         });
@@ -45,6 +43,6 @@ class CreateEvaluationStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evaluation_students');
+        Schema::dropIfExists('evaluation_faculties');
     }
 }

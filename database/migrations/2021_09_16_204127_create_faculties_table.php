@@ -15,10 +15,12 @@ class CreateFacultiesTable extends Migration
     {
         Schema::create('faculties', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('image')->nullable();
             $table->string('faculty_id')->unique();
             $table->string('first_name');
-            $table->string('middle_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
+            $table->string('suffix')->nullable();
             $table->string('gender');
             $table->string('contact_number')->unique();
             $table->text('address')->nullable();

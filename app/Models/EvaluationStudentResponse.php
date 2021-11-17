@@ -11,10 +11,11 @@ class EvaluationStudentResponse extends Model
     use SoftDeletes;
     use Userstamps;
     
-    protected $table = 'evaluation_student_reponses';
+    protected $table = 'evaluation_student_responses';
 
     protected $fillable = [
         'evaluation_student_id',
+        'question_id',
         'question',
         'answer',
     ];
@@ -23,4 +24,14 @@ class EvaluationStudentResponse extends Model
     {
         return $this->belongsTo('App\Models\EvaluationStudent', 'evaluation_student_id');
     }
+
+    public function question()
+    {
+        return $this->belongsTo('App\Models\Question', 'question_id');
+    }
+
+    /* public function countAgree()
+    {
+        return self::where('question_id')
+    } */
 }

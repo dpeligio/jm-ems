@@ -27,6 +27,8 @@
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('AdminLTE-3.1.0/plugins/chart.js/Chart.bundle.js') }}"></script>
+{{-- <script src=https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.2/echarts-en.min.js charset=utf-8></script> --}}
 
 <script>
 
@@ -216,10 +218,6 @@
 <!-- ChartJS -->
 <script src="{{ asset('AdminLTE-3.1.0/plugins/chart.js/Chart.min.js') }}"></script>
 
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('AdminLTE-3.1.0/dist/js/demo.js') }}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('AdminLTE-3.1.0/dist/js/pages/dashboard2.js') }}"></script>
 @endauth --}}
 {{-- Disable Submit Button --}}
 <script type="application/javascript">
@@ -349,5 +347,44 @@
 <script type="application/javascript">
     $(document).ready( function () {
         $('#datatable').DataTable();
+    });
+</script>
+
+{{-- Initialize tempusdominus-bootstrap --}}
+<script type="application/javascript">
+    $.extend(true, $.fn.datetimepicker.Constructor.Default, {
+        icons: {
+            /* time: 'far fa-clock',
+            date: 'far fa-calendar',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+            today: 'fas fa-calendar-check',
+            clear: 'far fa-trash-alt',
+            close: 'far fa-times-circle' */
+            time: 'far fa-clock',
+            date: 'far fa-calendar-alt',
+            up: 'fas fa-arrow-up',
+            down: 'fas fa-arrow-down',
+            previous: 'fas fa-chevron-left',
+            next: 'fas fa-chevron-right',
+            today: 'far fa-calendar-check',
+            clear: 'far fa-trash-alt',
+            close: 'fas fa-times'
+        },
+        buttons: {
+            showToday: true,
+            showClose: true,
+            showClear: true
+        }
+    });
+
+    // Initialize
+    $('.datetimepicker').datetimepicker();
+    $('.datetimepicker-no-time').datetimepicker({
+        buttons: {
+            time: false,
+        }
     });
 </script>

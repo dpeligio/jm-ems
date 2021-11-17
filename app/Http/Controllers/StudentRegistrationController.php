@@ -20,7 +20,7 @@ class StudentRegistrationController extends Controller
 			'student_id' => ['required', 'unique:students,student_id', 'unique:users,username'],
 			'year_level' => 'required',
 			'first_name' => 'required',
-			'middle_name' => 'required',
+			// 'middle_name' => 'required',
 			'last_name' => 'required',
             'gender' => 'required',
             // 'contact_number' => ['unique:students,contact_number'],
@@ -30,13 +30,14 @@ class StudentRegistrationController extends Controller
         ]);
 
 		$student = Student::create([
-			'year_level' => $request->get('year_level'),
 			'student_id' => $request->get('student_id'),
+			'year_level' => $request->get('year_level'),
 			'first_name' => $request->get('first_name'),
 			'middle_name' => $request->get('middle_name'),
 			'last_name' => $request->get('last_name'),
+			'suffix' => $request->get('suffix'),
 			'gender' => $request->get('gender'),
-			// 'contact_number' => $request->get('contact_number'),
+			'contact_number' => $request->get('contact_number'),
 			'address' => $request->get('address'),
         ]);
 

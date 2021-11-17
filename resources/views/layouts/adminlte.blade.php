@@ -9,7 +9,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-
+        {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
         <!-- jQuery -->
         <script src="{{ asset('AdminLTE-3.1.0/plugins/jquery/jquery.min.js') }}"></script>
 
@@ -48,12 +48,14 @@
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/sweetalert2/sweetalert2.min.css') }}">
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/select2/css/select2.min.css') }}">
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/chart.js/Chart.min.css') }}"> --}}
 
         <!-- DataTables -->
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         @yield('style')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">

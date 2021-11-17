@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\EvaluationStudent;
+use App\Models\EvaluationStudentResponse;
 use Illuminate\Http\Request;
+use App\Models\Faculty;
+use App\Models\EvaluationFaculty;
+use App\Models\Question;
+use Auth;
 
 class EvaluationStudentController extends Controller
 {
@@ -24,7 +29,16 @@ class EvaluationStudentController extends Controller
      */
     public function create()
     {
-        //
+        if(request()->ajax()) {
+            $evaluationFacultyID = request()->get('evaluation_faculty_id');
+            $data = [
+                'evaluation_faculty' => EvaluationFaculty::find($evaluationFacultyID),
+                'questions' => Question::where('is_active', 1)->get()
+            ];
+            return response()->json([
+                'modal_content' => view('evaluation_students.create', $data)->render()
+            ]);
+        }
     }
 
     /**
@@ -35,7 +49,27 @@ class EvaluationStudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'evaluation_faculty' => 'required',
+            'question' => 'required'
+        ]);
+        $evaluationStudent = EvaluationStudent::create([
+            'evaluation_faculty_id' => $request->get('evaluation_faculty'),
+            'student_id' => Auth::user()->student->student_id,
+            'positive_comments' => $request->get('positive_comments'),
+            'negative_comments' => $request->get('negative_comments'),
+        ]);
+
+        foreach($request->get('question') as $question_id => $response){
+            EvaluationStudentResponse::create([
+                'evaluation_student_id' => $evaluationStudent->id,
+                'question_id' => $question_id,
+                'question' => Question::find($question_id)->question,
+                'answer' => $response
+            ]);
+        }
+
+        return redirect()->route('evaluations.index')->with('alert-success', 'Saved');
     }
 
     /**
@@ -46,7 +80,11 @@ class EvaluationStudentController extends Controller
      */
     public function show(EvaluationStudent $evaluationStudent)
     {
-        //
+        if(request()->ajax()){
+            return response()->json([
+                'modal_content' => view('evaluation_students.show', compact('evaluationStudent'))->render()
+            ]);
+        }
     }
 
     /**
