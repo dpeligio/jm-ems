@@ -89,7 +89,7 @@ class RolePermissionSeeder extends Seeder
         );
 
         $faculty->givePermissionTo(
-            Permission::wherein('group', ['evaluations','students','faculties','results'])->where([
+            Permission::wherein('group', ['users', 'evaluations','students','faculties','results'])->where([
                 ['name', 'NOT LIKE', '%create%'],
                 ['name', 'NOT LIKE', '%edit%'],
                 ['name', 'NOT LIKE', '%destroy%'],

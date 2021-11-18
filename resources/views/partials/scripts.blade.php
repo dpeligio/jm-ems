@@ -40,6 +40,8 @@
         }
     });
     $(function() {
+        $('tr[data-toggle="tr-link"]').css('cursor', 'pointer')
+        $('.tr-link').css('cursor', 'pointer')
         $(".tr-link").click(function() {
             window.location = $(this).data("href");
         });

@@ -100,7 +100,6 @@ class FacultyController extends Controller
         
         if($request->get('add_user_account')){
             $request->validate([
-                'role' => ['required'],
                 'username' => ['required', 'string', 'max:255', 'unique:users,username'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
@@ -112,7 +111,7 @@ class FacultyController extends Controller
                 'password' => Hash::make($request->get('password'))
             ]);
 
-            $user->assignRole($request->get('role'));
+            $user->assignRole(3);
 
             UserFaculty::create([
                 'user_id' => $user->id,
@@ -121,7 +120,7 @@ class FacultyController extends Controller
 
             
         }
-		return back()->with('alert-success', 'Saved');
+		return redirect()->route('faculties.index')->with('alert-success', 'Saved');
     }
 
     /**
@@ -137,17 +136,17 @@ class FacultyController extends Controller
                 'faculty_show' => $faculty,
             ]);
         }else{
-            $roles = Role::select('*');
+            /* $roles = Role::select('*');
             if(Auth::user()->hasrole('System Administrator')){
                 $roles = $roles;
             }elseif(Auth::user()->hasrole('Administrator')){
                 $roles->where('id', '!=', 1)->get();
             }else{
                 $roles->whereNotIn('id', [1,2]);
-            }
+            } */
             $data = ([
                 'faculty_show' => $faculty,
-                'roles' => $roles->get(),
+                // 'roles' => $roles->get(),
             ]);
         }
 		/* if(!Auth::user()->hasrole('System Administrator')){

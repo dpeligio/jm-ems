@@ -182,6 +182,7 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         // ConsoleTVs\Charts\ChartsServiceProvider::class,
 
     ],
@@ -239,6 +240,7 @@ return [
          * My Providers
          */
         // 'Chart' => ConsoleTVs\Charts\ChartsServiceProvider::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

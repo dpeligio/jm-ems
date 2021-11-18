@@ -30,7 +30,7 @@ class QuestionController extends Controller
     public function create()
     {
         if(request()->ajax()) {
-            return reponse()->json([
+            return response()->json([
                 'modal_content' => view('question_management.questions.create')->render()
             ]);
         }
@@ -65,7 +65,7 @@ class QuestionController extends Controller
     public function show(Question $question)
     {
         if(request()->ajax()) {
-            return reponse()->json([
+            return response()->json([
                 'modal_content' => view('question_management.questions.show', compact('question'))->render()
             ]);
         }

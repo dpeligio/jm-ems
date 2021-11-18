@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Charts\EvaluationFacultyChart;
 use App\Charts\SampleChart;
+use PDF;
 use Auth;
 
 class EvaluationController extends Controller
@@ -294,5 +295,12 @@ class EvaluationController extends Controller
 		$evaluation = Evaluation::withTrashed()->find($evaluation);
 		$evaluation->restore();
 		return redirect()->route('evaluations.index')->with('alert-success','Restored');
-	}
+    }
+    
+    /* public function exportFacultyEvaluationPDF(FacultyEvaluqation);
+    {
+        
+        $pdf = PDF::loadView('pdf.invoice', $data);
+        return $pdf->download('invoice.pdf');
+    } */
 }

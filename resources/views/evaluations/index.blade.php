@@ -36,7 +36,7 @@
                         </thead>
                         <tbody>
                             @forelse ($evaluations as $evaluation)
-                            <tr @unlessrole('System Administrator') @can('evaluations.show') data-toggle="modal-ajax" data-target="#showEvaluation" data-href="{{ route('evaluations.show', $evaluation->id) }}"  @endcan @else class="{{ $evaluation->trashed() ? 'table-danger' : '' }}" @endunlessrole>
+                            <tr @unlessrole('System Administrator') @can('evaluations.show') data-toggle="tr-link" data-href="{{ route('evaluations.show', $evaluation->id) }}"  @endcan @else class="{{ $evaluation->trashed() ? 'table-danger' : '' }}" @endunlessrole>
                                 @role('System Administrator')
                                 <td>{{ $evaluation->id }}</td>
                                 @endrole

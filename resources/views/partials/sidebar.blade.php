@@ -43,6 +43,7 @@
                     </li>
                 @endguest
                 @auth
+                    @if(Auth::user()->hasrole('System Administrator') || Auth::user()->hasrole('Administrator'))
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -51,6 +52,7 @@
                             </p>
                         </a>
                     </li>
+                    @endif
                     @can('evaluations.index')
                     <li class="nav-item">
                         <a href="{{ route('evaluations.index') }}" class="nav-link">
