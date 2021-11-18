@@ -11,24 +11,24 @@
                     @csrf
                     <div class="card-body">
                         <div class="form-group row">
-                        <label for="inputUsername3" class="col-sm-2 col-form-label">Username</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="username" class="form-control" id="inputUsername3" placeholder="Username" value="{{ old('username') }}">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-                        <div class="col-sm-10">
-                            <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
-                        </div>
-                        </div>
-                        <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                            <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                            <label class="form-check-label" for="exampleCheck2">Remember me</label>
+                            <label for="inputUsername3" class="col-sm-4 col-form-label">Username</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="username" class="form-control" id="inputUsername3" placeholder="Username" value="{{ old('username') }}">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-4 col-form-label">Password</label>
+                            <div class="col-sm-8">
+                                <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-8">
+                                <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck2">
+                                <label class="form-check-label" for="exampleCheck2">Remember me</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer text-right">
