@@ -11,10 +11,10 @@
                     @csrf
                     <div class="card-body">
 						<div class="form-group row">
-							<div class="col-sm-5">
+							<div class="col-sm-4">
 								<label>School ID <strong class="text-danger">*</strong></label>
 							</div>
-							<div class="col-sm-7">
+							<div class="col-sm-8">
 								<div class="custom-file">
 									<input type="file" class="custom-file-input" id="customFile" name="school_id" accept="image/*">
 									<label class="custom-file-label" for="customFile">Choose file</label>
@@ -23,44 +23,44 @@
 							</div>
 						</div>
                         <div class="form-group row">
-							<label for="inputStudentID" class="col-sm-5 col-form-label">Student ID <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputStudentID" class="col-sm-4 col-form-label">Student ID <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="text" name="student_id" class="form-control" id="inputStudentID" placeholder="Student ID" value="{{ old('student_id') }}" required>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="inputYearLevel" class="col-sm-5 col-form-label">Year Level <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputYearLevel" class="col-sm-4 col-form-label">Year Level <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="number" max="4" min="1" name="year_level" class="form-control" id="inputYearLevel" placeholder="Year Level" value="{{ old('year_level') }}" required>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="inputFirstName" class="col-sm-5 col-form-label">First Name <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputFirstName" class="col-sm-4 col-form-label">First Name <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="text" name="first_name" class="form-control" id="inputFirstName" placeholder="First Name" value="{{ old('first_name') }}" required>
 							</div>
                         </div>
 						<div class="form-group row">
-							<label for="inputMiddleName" class="col-sm-5 col-form-label">Middle Name</label>
-							<div class="col-sm-7">
+							<label for="inputMiddleName" class="col-sm-4 col-form-label">Middle Name</label>
+							<div class="col-sm-8">
 								<input type="text" name="middle_name" class="form-control" id="inputMiddleName" placeholder="Middle Name" value="{{ old('middle_name') }}">
 							</div>
                         </div>
 						<div class="form-group row">
-							<label for="inputLastName" class="col-sm-5 col-form-label">Last Name <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputLastName" class="col-sm-4 col-form-label">Last Name <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="text" name="last_name" class="form-control" id="inputLastName" placeholder="Last Name" value="{{ old('last_name') }}" required>
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="inputSuffix" class="col-sm-5 col-form-label">Suffix</label>
-							<div class="col-sm-7">
+							<label for="inputSuffix" class="col-sm-4 col-form-label">Suffix</label>
+							<div class="col-sm-8">
 								<input type="text" name="suffix" class="form-control" id="inputSuffix" placeholder="Suffix" value="{{ old('suffix') }}">
 							</div>
 						</div>
 						<div class="form-group row">
-							<label class="col-sm-5 col-form-label">Gender <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label class="col-sm-4 col-form-label">Gender <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<div class="custom-control custom-radio">
 									<input class="custom-control-input" name="gender" type="radio" id="genderMale" value="male">
 									<label for="genderMale" class="custom-control-label">Male</label>
@@ -73,20 +73,20 @@
 						</div>
 						<hr>
 						<div class="form-group row">
-							<label for="inputEmail" class="col-sm-5 col-form-label">Email <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputEmail" class="col-sm-4 col-form-label">Email <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email" value="{{ old('email') }}">
 							</div>
 						</div>
                         <div class="form-group row">
-							<label for="inputPassword" class="col-sm-5 col-form-label">Password <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputPassword" class="col-sm-4 col-form-label">Password <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
 							</div>
                         </div>
                         <div class="form-group row">
-							<label for="inputPasswordConfirmation" class="col-sm-5 col-form-label">Confirm Password <strong class="text-danger">*</strong></label>
-							<div class="col-sm-7">
+							<label for="inputPasswordConfirmation" class="col-sm-4 col-form-label">Confirm Password <strong class="text-danger">*</strong></label>
+							<div class="col-sm-8">
 								<input type="password" name="password_confirmation" class="form-control" id="inputPasswordConfirmation" placeholder="Confirm Password">
 							</div>
                         </div>

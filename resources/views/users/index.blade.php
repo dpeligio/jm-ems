@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $user)
-                            <tr @unlessrole('System Administrator') @can('users.edit') data-toggle="modal-ajax" data-target="#showUser" data-href="{{ route('users.show', $user->id) }}"  @endcan @else class="{{ $user->trashed() ? 'table-danger' : '' }}" @endunlessrole>
+                            <tr @unlessrole('System Administrator') @can('users.show') data-toggle="modal-ajax" data-target="#showUser" data-href="{{ route('users.show', $user->id) }}"  @endcan @else class="{{ $user->trashed() ? 'table-danger' : '' }}" @endunlessrole>
                             @if(Auth::user()->hasrole('System Administrator'))
                             <td>
                                 {{ $user->id }}
