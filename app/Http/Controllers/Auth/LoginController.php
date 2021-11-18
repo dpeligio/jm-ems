@@ -72,7 +72,7 @@ class LoginController extends Controller
             } */
             if(Auth::user()->hasrole('System Administrator') || Auth::user()->hasrole('Administrator')){
                 return redirect()->route('home');
-            }elseif(Auth::user()->hasrole('Faculty')){
+            }elseif(Auth::user()->hasrole('Faculty') || Auth::user()->hasrole('Student')){
                 return redirect()->route('evaluations.index');
             }
         }else{
