@@ -11,7 +11,7 @@
                     @csrf
                     <div class="card-body">
                         <div class="form-group row">
-                            <label for="inputUsername3" class="col-sm-4 col-form-label">Useasdrname</label>
+                            <label for="inputUsername3" class="col-sm-4 col-form-label">Username</label>
                             <div class="col-sm-8">
                                 <input type="text" name="username" class="form-control" id="inputUsername3" placeholder="Username" value="{{ old('username') }}">
                             </div>
