@@ -15,7 +15,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $system_admin_faculty = Faculty::create([
-			'faculty_id' => 1234567001,
+            'faculty_id' => 1234567001,
+            'department_id' => 3,
 			'first_name' => "Kyouma",
 			'middle_name' => "Asd",
 			'last_name' => "hououin",
@@ -24,7 +25,8 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $admin_faculty = Faculty::create([
-			'faculty_id' => 1234567890,
+            'faculty_id' => 1234567890,
+            'department_id' => 3,
 			'first_name' => "John Michael",
 			'middle_name' => "D",
 			'last_name' => "Fernandez",

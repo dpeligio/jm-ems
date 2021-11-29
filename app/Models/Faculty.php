@@ -16,6 +16,7 @@ class Faculty extends Model
     
     protected $fillable = [
         'faculty_id',
+        'department_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -26,6 +27,11 @@ class Faculty extends Model
 
     public function user() {
         return $this->hasOne('App\Models\UserFaculty', 'faculty_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo('App\Models\Department', 'department_id');
     }
 
     public function getFacultyName()
@@ -54,6 +60,11 @@ class Faculty extends Model
     public function facultyEvaluations()
     {
         return EvaluationFaculty::where(['faculty_id', $this->id]);
+    }
+
+    public function classes()
+    {
+        return $this->hasMany('App\Models\Classes', 'faculty_id');
     }
 
     public function hasClass($classID)
@@ -135,9 +146,9 @@ class Faculty extends Model
     
     public function avatar()
     {
-        $avatar = 'images/user/default/male.jpg';
+        $avatar = 'images/'.$this->gender.'.jpg';
         if(!is_null($this->image)){
-            $avatar = 'images/user/'.$this->image;
+            $avatar = 'images/faculty/'.$this->image;
         }
         return $avatar;
     }

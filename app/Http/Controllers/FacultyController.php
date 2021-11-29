@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\UserFaculty;
 use App\Models\Section;
 use App\Models\FacultySection;
+use App\Models\Department;
 
 class FacultyController extends Controller
 {
@@ -49,26 +50,14 @@ class FacultyController extends Controller
      */
     public function create()
     {
-        $roles = Role::select('*');
-		if(Auth::user()->hasrole('System Administrator')){
-			$roles = $roles;
-		}elseif(Auth::user()->hasrole('Administrator')){
-			$roles->where('id', '!=', 1)->get();
-		}else{
-			$roles->whereNotIn('id', [1,2]);
+        if(request()->ajax()){
+            $data = ([
+                'departments' => Department::get()
+            ]);
+            return response()->json([
+                'modal_content' => view('faculties.create', $data)->render()
+            ]);
         }
-        $data = ([
-			'roles' => $roles->get()
-		]);
-		/* if(!Auth::user()->hasrole('System Administrator')){
-			$data = ([
-				'faculty' => $faculty,
-			]);
-		} */
-
-		return response()->json([
-			'modal_content' => view('faculties.create', $data)->render()
-		]);
     }
 
     /**
@@ -89,6 +78,7 @@ class FacultyController extends Controller
         ]);
 
 		$faculty = Faculty::create([
+			'department_id' => $request->get('department'),
 			'faculty_id' => $request->get('faculty_id'),
 			'first_name' => $request->get('first_name'),
 			'middle_name' => $request->get('middle_name'),
@@ -131,33 +121,7 @@ class FacultyController extends Controller
      */
     public function show(Faculty $faculty)
     {
-        if($faculty->user){
-            $data = ([
-                'faculty_show' => $faculty,
-            ]);
-        }else{
-            /* $roles = Role::select('*');
-            if(Auth::user()->hasrole('System Administrator')){
-                $roles = $roles;
-            }elseif(Auth::user()->hasrole('Administrator')){
-                $roles->where('id', '!=', 1)->get();
-            }else{
-                $roles->whereNotIn('id', [1,2]);
-            } */
-            $data = ([
-                'faculty_show' => $faculty,
-                // 'roles' => $roles->get(),
-            ]);
-        }
-		/* if(!Auth::user()->hasrole('System Administrator')){
-			$data = ([
-				'faculty' => $faculty,
-			]);
-		} */
-
-		return response()->json([
-			'modal_content' => view('faculties.show', $data)->render()
-		]);
+		return view('faculties.show', compact('faculty'));
     }
 
     /**
@@ -168,23 +132,15 @@ class FacultyController extends Controller
      */
     public function edit(Faculty $faculty)
     {
-        $roles = Role::select('*');
-		if(Auth::user()->hasrole('System Administrator')){
-			$roles = $roles;
-		}elseif(Auth::user()->hasrole('Administrator')){
-			$roles->where('id', '!=', 1)->get();
-		}else{
-			$roles->whereNotIn('id', [1,2]);
+        if(request()->ajax()){
+            $data = ([
+                'departments' => Department::get(),
+                'faculty' => $faculty,
+            ]);
+            return response()->json([
+                'modal_content' => view('faculties.edit', $data)->render()
+            ]);
         }
-        $data = ([
-            'faculty_edit' => $faculty,
-			'roles' => $roles->get(),
-			'sections' => Section::get()
-        ]);
-        
-        return response()->json([
-			'modal_content' => view('faculties.edit', $data)->render()
-		]);
     }
 
     /**
@@ -206,6 +162,7 @@ class FacultyController extends Controller
         ]);
 
 		$faculty->update([
+            'department_id' => $request->get('department'),
 			'faculty_id' => $request->get('faculty_id'),
 			'first_name' => $request->get('first_name'),
 			'middle_name' => $request->get('middle_name'),
@@ -215,11 +172,7 @@ class FacultyController extends Controller
 			'address' => $request->get('address'),
         ]);
 
-        $faculty->section->update([
-            'section_id' => $request->get('section')
-        ]);
-
-        return back()->with('alert-success', 'Saved');
+        return redirect()->route('faculties.show', $faculty->id)->with('alert-success', 'Saved');
     }
 
     /**

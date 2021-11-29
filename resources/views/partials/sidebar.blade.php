@@ -7,9 +7,9 @@
     <div class="sidebar">
         @auth
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            {{-- <div class="image">
-                <img src="{{ asset('AdminLTE-3.1.0/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
-            </div> --}}
+            <div class="image">
+                <img src="{{ asset(Auth::user()->avatar()) }}" class="img-circle elevation-2" alt="User Image">
+            </div>
             <div class="info">
                 <a href="#" class="d-block">
                     @if (Auth::user()->student)
@@ -43,7 +43,7 @@
                     </li>
                 @endguest
                 @auth
-                    @if(Auth::user()->hasrole('System Administrator') || Auth::user()->hasrole('Administrator'))
+                    {{-- @if(Auth::user()->hasrole('System Administrator') || Auth::user()->hasrole('Administrator'))
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -52,7 +52,7 @@
                             </p>
                         </a>
                     </li>
-                    @endif
+                    @endif --}}
                     @can('evaluations.index')
                     <li class="nav-item">
                         <a href="{{ route('evaluations.index') }}" class="nav-link">
@@ -166,7 +166,7 @@
                         </ul>
                     </li>
                     @endcanany
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                             <i class="nav-icon fas fa-sign-out"></i>
                             <p>
@@ -176,7 +176,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                    </li>
+                    </li> --}}
                 @endauth
             </ul>
         </nav>

@@ -11,6 +11,8 @@ use App\Models\UserFaculty;
 use App\Models\UserStudent;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountVerified;
 
 class UserController extends Controller
 {
@@ -160,28 +162,36 @@ class UserController extends Controller
      */
     public function destroy(User $user)
 	{
-		if (request()->get('permanent')) {
-			$user->forceDelete();
-		}else{
-			$user->delete();
-		}
-		return back()->with('alert-danger','Deleted');
-		// return redirect()->route('users.index')->with('alert-danger','User successfully deleted');
+        if($user->id != 1){
+            if (request()->get('permanent')) {
+                $user->forceDelete();
+            }else{
+                $user->delete();
+            }
+            return redirect()->route('users.index')->with('alert-danger','Deleted');
+        }else{
+            return redirect()->route('users.index')->with('alert-danger','You cannot delete System Administrator');
+        }
 	}
 
 	public function restore($user)
 	{
 		$user = User::withTrashed()->find($user);
 		$user->restore();
-		return back()->with('alert-success','Restored');
-		// return redirect()->route('users.index')->with('alert-success','User successfully restored');
+		return redirect()->route('users.index')->with('alert-success','Restored');
     }
     
     public function activate(User $user)
     {
+        Mail::to($user->email)->send(new AccountVerified($user));
         $user->update([
             'is_verified' => 1
         ]);
         return redirect()->route('users.index')->with('alert-success', 'saved');
+    }
+
+    public function accountSettings(User $user)
+    {
+        return view('users.account_settings', compact('user'));
     }
 }

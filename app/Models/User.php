@@ -28,6 +28,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'temp_password',
     ];
 
     /**
@@ -61,6 +62,15 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\UserFaculty', 'user_id');
     }
 
+    public function userInfo()
+    {
+        if(isset($this->student->id)){
+            return $this->student->student;
+        }else{
+            return $this->faculty->faculty;
+        }
+    }
+
     public function file_attachments()
     {
         return $this->hasMany('App\Models\UserFileAttachment', 'user_id');
@@ -73,7 +83,17 @@ class User extends Authenticatable
                 return $file_attachment->file_attachment->file_path.'/'.$file_attachment->file_attachment->file_name;
             }
         }
-        return "";
+        return 'images/no-image.png';
+    }
+
+    public function avatar()
+    {
+
+        $avatar = 'images/'.$this->userInfo()->gender.'.jpg';
+        if(!is_null($this->image)){
+            $avatar = 'images/student/'.$this->image;
+        }
+        return $avatar;
     }
 
 }

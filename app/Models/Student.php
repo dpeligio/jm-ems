@@ -22,7 +22,8 @@ class Student extends Model
         'last_name',
         'gender',
         'contact_number',
-        'address'
+        'address',
+        'suffix'
     ];
 
     public function classes()
@@ -126,7 +127,7 @@ class Student extends Model
                 $name = $this->first_name.' '.
                     (is_null($this->middle_name) ? '' : $this->middle_name[0].'. ').
                     $this->last_name.
-				    ' '.$this->suffix;
+				    ', '.$this->suffix;
                     break;
             }
         }
@@ -136,9 +137,9 @@ class Student extends Model
     
     public function avatar()
     {
-        $avatar = 'images/user/default/male.jpg';
+        $avatar = 'images/'.$this->gender.'.jpg';
         if(!is_null($this->image)){
-            $avatar = 'images/user/'.$this->image;
+            $avatar = 'images/student/'.$this->image;
         }
         return $avatar;
     }

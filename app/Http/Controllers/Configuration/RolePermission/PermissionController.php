@@ -51,7 +51,7 @@ class PermissionController extends Controller
 			$data = [
 				'permissions' => $permissions->get()
 			];
-			return view('configuration.role_permission.permissions.index', $data);
+			return view('configuration.role_permission.roles.permissions.index', $data);
 
 		}
 	}

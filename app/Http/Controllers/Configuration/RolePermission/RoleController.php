@@ -40,7 +40,7 @@ class RoleController extends Controller
 			return datatables()->of($roles)
 			->addColumn('action', function($row){
 				$action = '<a class="text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="'.route('roles.edit', $row->id).'" data-target="#editRole"><i class="fad fa-edit fa-lg"></i></a>';
-				if($row->id != 1){
+				if($row->id > 5){
 					if($row->trashed()){
 						$action .= '<a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="'.route('roles.restore', $row->id).'"><i class="fad fa-download fa-lg"></i></a>';
 					}else{
@@ -176,13 +176,16 @@ class RoleController extends Controller
 	 */
 	public function destroy(Role $role)
 	{
-		if (request()->get('permanent')) {
-			$role->forceDelete();
+		if($role->id > 4){
+			if (request()->get('permanent')) {
+				$role->forceDelete();
+			}else{
+				$role->delete();
+			}
+			return redirect()->route('roles.index')->with('alert-danger','Role successfully deleted');
 		}else{
-			$role->delete();
+			return redirect()->route('roles.index')->with('alert-danger','You cannot delete this role');
 		}
-		return redirect()->route('roles.index')
-						->with('alert-danger','Role successfully deleted');
 	}
 
 	public function restore($role)

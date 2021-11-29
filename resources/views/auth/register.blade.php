@@ -81,7 +81,7 @@
 								<input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email" value="{{ old('email') }}">
 							</div>
 						</div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
 							<label for="inputPassword" class="col-sm-4 col-form-label">Password <strong class="text-danger">*</strong></label>
 							<div class="col-sm-8">
 								<input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
@@ -92,7 +92,7 @@
 							<div class="col-sm-8">
 								<input type="password" name="password_confirmation" class="form-control" id="inputPasswordConfirmation" placeholder="Confirm Password">
 							</div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-info">Register</button>

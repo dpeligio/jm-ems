@@ -20,7 +20,7 @@
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link {{ url()->current()==route('roles.index') ? 'active' : '' }}" href="{{ route('roles.index') }}">Roles</a>
                     @can('permissions.index')
-                    <a class="nav-link {{ url()->current()==route('permissions.index') ? 'active' : '' }}" href="{{ route('permissions.index') }}">Permissions</a>
+                    {{-- <a class="nav-link {{ url()->current()==route('permissions.index') ? 'active' : '' }}" href="{{ route('permissions.index') }}">Permissions</a> --}}
                     @endcan
                 </div>
             </div>

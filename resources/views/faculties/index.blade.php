@@ -30,6 +30,7 @@
                                 <th>ID</th>
                                 @endrole
                                 <th>Account Status</th>
+                                <th>Department</th>
                                 <th>Faculty ID</th>
                                 <th>First Name</th>
                                 <th>Middle Name</th>
@@ -41,25 +42,29 @@
                         </thead>
                         <tbody>
                             @foreach ($faculties as $faculty)
-                            <tr @unlessrole('System Administrator') @can('faculties.show') data-toggle="modal-ajax" data-target="#showFaculty" data-href="{{ route('faculties.show', $faculty->id) }}"  @endcan @else class="{{ $faculty->trashed() ? 'table-danger' : '' }}" @endunlessrole>
+                            <tr @unlessrole('System Administrator') @can('faculties.show') data-toggle="tr-link" data-href="{{ route('faculties.show', $faculty->id) }}"  @endcan @else class="{{ $faculty->trashed() ? 'table-danger' : '' }}" @endunlessrole>
                                 @role('System Administrator')
                                 <td>{{ $faculty->id }}</td>
                                 @endrole
                                 <td>
                                     @isset ($faculty->user)
-                                    <span class="text-success">Active</span>
+                                    @if($faculty->user->user->is_verified == 1)
+                                        <span class="badge badge-success">Verified</span>
                                     @else
-                                    <span class="text-danger">N/A</span>
+                                        <span class="badge badge-warning">Under Validation</span>
+                                    @endif
+                                    @else
+                                        <span class="text-danger">N/A</span>
                                     @endif
                                 </td>
+                                <td>{{ $faculty->department->name ?? "N/A" }}</td>
                                 <td>{{ $faculty->faculty_id }}</td>
                                 <td>{{ $faculty->first_name }}</td>
                                 <td>{{ $faculty->middle_name }}</td>
                                 <td>{{ $faculty->last_name }}</td>
                                 @role('System Administrator')
                                     <td class="text-center">
-                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showFaculty" data-href="{{ route('faculties.show',$faculty->id) }}"><i class="fad fa-file fa-lg"></i></a>
-                                        {{-- <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editStudent" data-href="{{ route('faculties.edit',$faculty->id) }}"><i class="fad fa-edit fa-lg"></i></a> --}}
+                                        <a href="{{ route('faculties.show',$faculty->id) }}"><i class="fad fa-file fa-lg"></i></a>
                                         @if ($faculty->trashed())
                                             <a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('faculties.restore', $faculty->id) }}"><i class="fad fa-download fa-lg"></i></a>
                                         @else

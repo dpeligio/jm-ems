@@ -1,7 +1,7 @@
 <form action="{{ route('students.store') }}" method="POST" autocomplete="off">
     @csrf
     <div class="modal fade" id="createStudent" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Student</h5>
@@ -81,22 +81,22 @@
                                         </option>
                                     @endforeach
                                 </select> --}}
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label>Username: <strong class="text-danger">*</strong></label><br>
                                     <input class="form-control" type="text" name="username" required>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label>Email: <strong class="text-danger">*</strong></label><br>
                                     <input class="form-control" type="email" name="email" required>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label>Password: <strong class="text-danger">*</strong></label><br>
                                     <input id="password" type="password" class="form-control" name="password" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Confirm Password: <strong class="text-danger">*</strong></label><br>
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

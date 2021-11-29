@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Faculty;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Auth;
 
 class ClassesController extends Controller
 {
@@ -19,11 +20,26 @@ class ClassesController extends Controller
     public function index()
     {
         $classes = Classes::select('*');
-        $data = [
-            'classes' => $classes->get()
-        ];
 
-        return view('classes.index', $data);
+        if(isset(Auth::user()->student->id)){
+            $data = [
+                'studentClasses' => Auth::user()->student->student->classes
+            ];
+    
+            return view('classes.student_index', $data);
+        }else{
+            if(Auth::user()->hasrole('Faculty')){
+                $data = [
+                    'facultyClasses' => Auth::user()->faculty->faculty->classes
+                ];
+            }else{
+                $data = [
+                    'classes' => $classes->get()
+                ];
+            }
+    
+            return view('classes.index', $data);
+        }
     }
 
     /**

@@ -109,16 +109,18 @@ class StudentController extends Controller
         
         if($request->get('add_user_account')){
             $request->validate([
-                'role' => ['required'],
                 'username' => ['required', 'string', 'max:255', 'unique:users,username'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
             ]);
 
+            $password = base64_encode(time());
+
             $user = User::create([
-                'username' => $request->get('username'),
+                'username' => $request->get('student_id'),
                 'email' => $request->get('email'),
-                'password' => Hash::make($request->get('password'))
+                'password' => Hash::make($password),
+                'temp_password' => $password
             ]);
 
             $user->assignRole(4);
@@ -141,28 +143,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        if($student->user){
-            $data = ([
-                'student_show' => $student,
-            ]);
-        }else{
-            /* $roles = Role::select('*');
-            if(Auth::user()->hasrole('System Administrator')){
-                $roles = $roles;
-            }elseif(Auth::user()->hasrole('Administrator')){
-                $roles->where('id', '!=', 1)->get();
-            }else{
-                $roles->whereNotIn('id', [1,2]);
-            } */
-            $data = ([
-                'student_show' => $student,
-                // 'roles' => $roles->get(),
-            ]);
-        }
-
-		return response()->json([
-			'modal_content' => view('students.show', $data)->render()
-        ]);
+		return view('students.show', compact('student'));
         
     }
 
@@ -173,23 +154,9 @@ class StudentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Student $student)
-    {
-        $roles = Role::select('*');
-		if(Auth::user()->hasrole('System Administrator')){
-			$roles = $roles;
-		}elseif(Auth::user()->hasrole('Administrator')){
-			$roles->where('id', '!=', 1)->get();
-		}else{
-			$roles->whereNotIn('id', [1,2]);
-        }
-        $data = ([
-            'student_edit' => $student,
-			// 'roles' => $roles->get(),
-			// 'sections' => Section::get()
-        ]);
-        
+    {   
         return response()->json([
-			'modal_content' => view('students.edit', $data)->render()
+			'modal_content' => view('students.edit', compact('student'))->render()
 		]);
     }
 

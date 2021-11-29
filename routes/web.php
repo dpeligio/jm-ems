@@ -17,7 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function(){
+	return redirect()->route('evaluations.index');
+})->name('home');
 
 Route::post('student_register', [
 	'as' => 'student_registration.register',
@@ -41,7 +44,12 @@ Route::group(array('middleware'=>['auth']), function() {
 	 * Users
 	 */
 	Route::resource('users', 'UserController');
-	// validate user/student
+	// User Account settings
+	Route::get('account/{user}', [
+		'as' => 'users.account_settings',
+		'uses' => 'UserController@accountSettings'
+	]);
+	// activate user account
 	Route::get('user_activate/{user}', [
 		'as' => 'users.activate',
 		'uses' => 'UserController@activate'

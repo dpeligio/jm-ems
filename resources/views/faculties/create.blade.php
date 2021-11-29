@@ -13,6 +13,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label>Department:</label><br>
+                                <select name="department"class="form-control select2">
+                                    <option></option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Faculty ID:</label><br>
                                 <input class="form-control" type="text" name="faculty_id" required>
                             </div>

@@ -29,7 +29,7 @@ class StudentRegistrationController extends Controller
             // 'contact_number' => ['unique:students,contact_number'],
             // 'student_id' => ['required', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
 		$student = Student::create([
@@ -43,11 +43,12 @@ class StudentRegistrationController extends Controller
 			'contact_number' => $request->get('contact_number'),
 			'address' => $request->get('address'),
         ]);
-
+        $password = base64_encode(time());
         $user = User::create([
             'username' => $request->get('student_id'),
             'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password'))
+            'password' => Hash::make($password),
+            'temp_password' => $password
         ]);
 
         $user->assignRole(4);
@@ -56,7 +57,7 @@ class StudentRegistrationController extends Controller
         $mimeType = $file->getClientMimeType();
         $fileName = 'School ID validation'.'_'.date('m-d-Y H.i.s').'.'.$file->getClientOriginalExtension();
 
-        $file_attachment = FileAttachment::create([
+        /* $file_attachment = FileAttachment::create([
             'subject' => 'School ID validation',
             'mime_type' => $mimeType,
             'file_extension' => $file->getClientOriginalExtension(),
@@ -69,11 +70,14 @@ class StudentRegistrationController extends Controller
         $userFileAttachment = UserFileAttachment::create([
             'user_id' => $user->id,
             'file_attachment_id' => $file_attachment->id,
-        ]);
+        ]); */
+        
         $uploadPath = 'File Attachments/School ID Validation/';
         $file_attachment->update(['file_path' => $uploadPath]);
         Storage::disk('upload')->putFileAs($uploadPath, $file, $fileName);
-
+        $user->update([
+            'student_id_image' => $fileName
+        ]);
         UserStudent::create([
             'user_id' => $user->id,
             'student_id' => $student->id
@@ -81,6 +85,6 @@ class StudentRegistrationController extends Controller
 
         Mail::to($user->email)->send(new StudentRegistration($user));
 
-		return back()->with('alert-success', 'Saved');
+		return view('auth.registration_success')->with('alert-success', 'Saved');
     }
 }

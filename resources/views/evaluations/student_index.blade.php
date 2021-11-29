@@ -95,7 +95,7 @@
                                                         <p>{{ $evaluationClass->class->faculty->fullname('') }}</p>
                                                     </div>
                                                     <div class="icon">
-                                                        <img src="{{ asset('images/user/default/male.jpg') }}" alt="">
+                                                        <img class="img-thumbnail" src="{{ asset($evaluationClass->class->faculty->avatar()) }}">
                                                     </div>
                                                     @if($evaluationClass->isDone())
                                                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showEvaluationStudent" data-href="{{ route('evaluation_students.show', $evaluationClass->studentResponseID()) }}" class="small-box-footer">View Response <i class="fas fa-arrow-circle-right"></i></a>

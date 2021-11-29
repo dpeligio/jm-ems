@@ -8,18 +8,18 @@
 </head>
 <body>
     <p>
-        This is to confirm that your account has been approved.                                          
-        You may now login to Online Fculty Evaluation Management of Golden West Colleges using the information below:
+        This is to confirm that your account has been approved.                                      
+        You may now <a href="{{ config('app.url') }}">login</a> to Online Faculty Evaluation Management of Golden West Colleges using the information below:
     </p>
     <p>
         <ul style="list-style: none">
             <li>
                 <b>Username:</b>
-                {{ $user->username}}
+                {{ $user->username }}
             </li>
             <li>
                 <b>Password:</b>
-                {{ $user->password}}
+                {{ $user->temp_password }}
             </li>
         </ul>
     </p>

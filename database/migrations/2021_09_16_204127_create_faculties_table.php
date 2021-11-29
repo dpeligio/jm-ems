@@ -16,6 +16,7 @@ class CreateFacultiesTable extends Migration
         Schema::create('faculties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('image')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
             $table->string('faculty_id')->unique();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -29,6 +30,12 @@ class CreateFacultiesTable extends Migration
 			$table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('department_id')
+                ->references('id')
+                ->on('departments')
+				->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
