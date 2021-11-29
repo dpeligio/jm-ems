@@ -1,8 +1,12 @@
 <div class="modal fade" id="showEvaluationStudent" data-backdrop="static" data-keyboard="false" tabindex="-1" faculty="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" faculty="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" faculty="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Evaluate</h5>
+                <h5 class="modal-title">
+                    {{ $evaluationStudent->evaluationClass->class->faculty->getFacultyName() }} |
+                    {{ $evaluationStudent->evaluationClass->class->course->course_code }} -
+                    {{ $evaluationStudent->evaluationClass->class->course->title }}
+                </h5>
                 <button type="button" class="close" data-dismiss="modal-ajax" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -16,6 +20,10 @@
                         <div class="form-group">
                             <label>Faculty:</label>
                             {{ $evaluationStudent->evaluationClass->class->faculty->getFacultyName() }}
+                        </div>
+                        <div class="form-group">
+                            <label>Date Evaluated:</label>
+                            {{ date('F d, Y h:i A', strtotime($evaluationStudent->created_at)) }}
                         </div>
                     </div>
                     <div class="col-md-8">

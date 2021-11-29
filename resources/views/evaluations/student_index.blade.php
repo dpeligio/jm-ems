@@ -16,7 +16,7 @@
 </div>
 <section class="content">
     <div class="container-fluid">
-        <table>
+        {{-- <table>
             <thead>
                 <tr>
                     <td>Course Code</td>
@@ -36,7 +36,7 @@
                 @endforeach
             </tbody>
         </table>
-        <hr>
+        <hr> --}}
         <div class="row">
             <div class="col" id="accordion">
                 @forelse ($evaluations as $evaluation)
@@ -45,14 +45,16 @@
                             <div class="card-header d-flex p-0">
                                 <h4 class="card-title p-3 text-dark">
                                     {{ $evaluation->title }}
-                                    [{{ $evaluation->getStatus() }}]
-                                    @if($evaluation->trashed())
-                                    <strong class="text-danger">
-                                        [DELETED]
-                                    </strong>
-                                    @endif
+                                    {!! $evaluation->getStatusbadge() !!}
+                                    |
+                                    <i>
+                                        <b>Date:</b>
+                                        {{ date('F d, Y h:i A', strtotime($evaluation->start_date)) }}
+                                        -
+                                        {{ date('F d, Y h:i A', strtotime($evaluation->end_date)) }}
+                                    </i>
                                 </h4>
-                                <ul class="nav nav-pills ml-auto p-2">
+                                {{-- <ul class="nav nav-pills ml-auto p-2">
                                     @if ($evaluation->trashed())
                                         @can('evaluations.restore')
                                         <li class="nav-item">
@@ -71,7 +73,7 @@
                                         <a class="nav-link text-primary" href="{{ route('evaluations.edit', $evaluation->id) }}"><i class="fad fa-edit"></i> Edit</a>
                                     </li>
                                     @endcan
-                                </ul>
+                                </ul> --}}
                             </div>
                         </a>
                         <div id="evaluation-{{ $evaluation->id }}" class="collapse @if($evaluation->getStatus() == "ongoing") show @endif" data-parent="#accordion">
@@ -97,7 +99,7 @@
                                                     </div>
                                                     @if($evaluationClass->isDone())
                                                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showEvaluationStudent" data-href="{{ route('evaluation_students.show', $evaluationClass->studentResponseID()) }}" class="small-box-footer">View Response <i class="fas fa-arrow-circle-right"></i></a>
-                                                    @else
+                                                    @elseif($evaluation->getStatus() == 'ongoing')
                                                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#createEvaluationStudent" data-href="{{ route('evaluation_students.create', ['evaluation_class_id' => $evaluationClass->id]) }}" class="small-box-footer">Evaluate <i class="fas fa-arrow-circle-right"></i></a>
                                                     @endif
                                                 </div>

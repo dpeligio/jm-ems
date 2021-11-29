@@ -59,6 +59,11 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        
+        'excel' => [
+            'driver' => 'local',
+            'root' => public_path().'/excel-exports',
+        ],
 
         's3' => [
             'driver' => 's3',

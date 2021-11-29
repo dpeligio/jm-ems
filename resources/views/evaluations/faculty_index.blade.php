@@ -29,12 +29,14 @@
                                 <div class="card-header d-flex p-0">
                                     <h4 class="card-title p-3 text-dark">
                                         {{ $evaluation->title }}
-                                        [{{ $evaluation->getStatus() }}]
-                                        @if($evaluation->trashed())
-                                        <strong class="text-danger">
-                                            [DELETED]
-                                        </strong>
-                                        @endif
+                                        {!! $evaluation->getStatusbadge() !!}
+                                        |
+                                        <i>
+                                            <b>Date:</b>
+                                            {{ date('F d, Y h:i A', strtotime($evaluation->start_date)) }}
+                                            -
+                                            {{ date('F d, Y h:i A', strtotime($evaluation->end_date)) }}
+                                        </i>
                                     </h4>
                                 </div>
                             </a>

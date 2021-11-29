@@ -124,8 +124,22 @@ class EvaluationClassesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(EvaluationClasses $evaluationClasses)
-    {
-        //
+	{
+        $evaluationID = $evaluationClasses->evaluation_id;
+		if (request()->get('permanent')) {
+			$evaluationClasses->forceDelete();
+		}else{
+			$evaluationClasses->delete();
+		}
+		return redirect()->route('evaluations.show', $evaluationID)->with('alert-danger','Deleted');
+	}
+
+	public function restore($evaluation)
+	{
+        $evaluationClasses = EvaluationClasses::withTrashed()->find($evaluation);
+        $evaluationID = $evaluationClasses->evaluation_id;
+		$evaluationClasses->restore();
+		return redirect()->route('evaluations.show', $evaluationID)->with('alert-success','Restored');
     }
 
     public function export() 
@@ -134,16 +148,20 @@ class EvaluationClassesController extends Controller
             'evaluationClass' => EvaluationClasses::find(request()->get('evaluation_class_id'))
         ]); */
         $evaluationClass = EvaluationClasses::find(request()->get('evaluation_class_id'));
-        return Excel::download(new EvaluationClassExport(
-            $evaluationClass->id), $evaluationClass->id.'-'.$evaluationClass->class->faculty->fullname('').'-'.$evaluationClass->class->course->course_code.'.xlsx'
-        );
-        // return redirect()->route('evaluations.show', $evaluationClass->evaluation_id);
+        $faculty = $evaluationClass->class->faculty;
+        $fileName = $faculty->last_name.', '.$faculty->first_name.' ('.$evaluationClass->class->course->course_code.') '.date('Y-m-d-H-i-s').'.xlsx';
+        Excel::store(new EvaluationClassExport($evaluationClasses), $fileName, 'excel');
+        /* return Excel::download(new EvaluationClassExport(
+            $evaluationClass->id), $fileName
+        ); */
+        return redirect()->route('evaluations.show', $evaluationClass->evaluation_id);
     }
 
     public function mailToFaculty(EvaluationClasses $evaluationClasses)
     {
-        // echo $evaluationClasses->class->faculty->user->user->email;
-        Mail::to('davidpaulsan.18@gmail.com')->send(new FacultyEvaluationResult($evaluationClasses));
+        // $fileName = $evaluationClasses->id.'-'.$evaluationClasses->class->faculty->fullname('').'-'.$evaluationClasses->class->course->course_code.'.xlsx';
+        // Excel::store(new EvaluationClassExport($evaluationClasses), $fileName, 'excel');
+        Mail::to($evaluationClasses->class->faculty->user->email)->send(new FacultyEvaluationResult($evaluationClasses));
         return redirect()->route('evaluations.show', $evaluationClasses->evaluation_id);
     }
 }

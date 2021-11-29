@@ -4,10 +4,10 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0"> {{ $evaluation->title }} </h1>
+                <h1 class="m-0"> {{ $evaluation->title }} {!! $evaluation->getStatusBadge() !!}</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a class="btn btn-primary" href="javascript:void(0)" data-href="{{ route('evaluations.edit', $evaluation->id) }}"><i class="fad fa-edit"></i> Edit</a>
+                <a class="btn btn-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('evaluations.edit', $evaluation->id) }}" data-target="#editEvaluation"><i class="fad fa-edit"></i> Edit</a>
                 @if ($evaluation->trashed())
                     <a class="btn btn-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('evaluations.restore', $evaluation->id) }}"><i class="fad fa-download"></i> Restore</a>
                 @else
@@ -32,16 +32,21 @@
                                     {{ $evaluationClass->class->course->title }}
                                 </h4>
                                 <ul class="nav nav-pills ml-auto p-2">
-                                    @can('evaluations.edit')
+                                    @can('evaluations.export')
                                     <li class="nav-item">
                                         <a class="nav-link text-primary" href="{{ route('evaluation_classes.export', ['evaluation_class_id' => $evaluationClass->id]) }}" target="_blank"><i class="fad fa-table"></i> Export Excel</a>
                                     </li>
                                     @endcan
-                                    @can('evaluations.edit')
+                                    @can('evaluations.send_email')
                                     <li class="nav-item">
                                         <a class="nav-link text-primary" href="{{ route('evaluation_classes.send_email', $evaluationClass->id) }}"><i class="fad fa-envelope"></i> Send Email</a>
                                     </li>
                                     @endcan
+                                    @if ($evaluationClass->trashed())
+                                        <a class="btn btn-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('evaluation_classes.restore', $evaluationClass->id) }}"><i class="fad fa-download"></i> Restore</a>
+                                    @else
+                                        <a class="btn btn-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('evaluation_classes.destroy', $evaluationClass->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+                                    @endif
                                 </ul>
                             </div>
                         </a>
@@ -51,8 +56,7 @@
                                     <div class="row">
                                         @if($evaluationClass->evaluationStudentResponses()->count() > 0)
                                         <div class="col-md-12">
-                                                        {!! $evaluationClassChart[$evaluationClass->id]->container() !!}
-                                                   
+                                            {!! $evaluationClassChart[$evaluationClass->id]->container() !!}
                                         </div>
                                         @else
                                         <div class="col-md-12">

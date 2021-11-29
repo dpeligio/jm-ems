@@ -29,6 +29,7 @@ class FacultyEvaluationResult extends Mailable
     public function build()
     {
         return $this->subject('Evaluation Complete')
-        ->view('mail.faculty_evaluation_result');
+        ->view('mail.faculty_evaluation_result')
+        ->attach(public_path().'/excel-exports/Riego, Carolina (CC101) 2021-11-29-09-45-22.xlsx');
     }
 }

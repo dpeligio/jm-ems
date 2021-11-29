@@ -161,16 +161,6 @@ class EvaluationController extends Controller
             }
         }
 
-        /* if($request->get('faculties')) {
-            $faculties = $request->get('faculties');
-            foreach($faculties as $faculty_id){
-                EvaluationFaculty::create([
-                    'evaluation_id' => $evaluation->id,
-                    'faculty_id' => $faculty_id,
-                ]);
-            }
-        } */
-
         return redirect()->route('evaluations.index')->with('alert-success', 'saved');
     }
 
@@ -310,8 +300,13 @@ class EvaluationController extends Controller
     public function edit(Evaluation $evaluation)
     {
         if(request()->ajax()) {
+            $data = [
+                'classes' => Classes::get(),
+                'evaluation' => $evaluation,
+                'evaluationClassIDs' => $evaluation->evaluationClasses->pluck('class_id')->toArray(),
+            ];
             return response()->json([
-                'modal_content' => view('evaluations.edit', compact('evaluation'))->render()
+                'modal_content' => view('evaluations.edit', $data)->render()
             ]);
         }
     }
@@ -326,7 +321,9 @@ class EvaluationController extends Controller
     public function update(Request $request, Evaluation $evaluation)
     {
         $request->validate([
-            'faculty' => 'required',
+            'title' => 'required',
+            // 'faculties' => 'required',
+            'classes' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
@@ -346,13 +343,34 @@ class EvaluationController extends Controller
         $evaluation->update([
             'title' => $request->get('title'),
             'status' => $status,
-            'faculty_id' => $request->get('faculty'),
             'start_date' => $start_date,
             'end_date' => $end_date,
             'description' => $request->get('description'),
         ]);
 
-        return redirect()->route('evaluations.index')->with('alert-success', 'saved');
+        $evaluationClassIDs = [];
+
+        if($request->get('classes')) {
+            $classes = $request->get('classes');
+            
+            foreach($classes as $class_id){
+                $query = EvaluationClasses::where([
+                    ['evaluation_id', $evaluation->id],
+                    ['class_id', $class_id],
+                ])->doesntExist();
+                if($query){
+                    $evaluationClass = EvaluationClasses::create([
+                        'evaluation_id' => $evaluation->id,
+                        'class_id' => $class_id,
+                    ]);
+                }
+                $evaluationClassIDs[] = $class_id;
+            }
+        }
+
+        EvaluationClasses::where('evaluation_id', $evaluation->id)->whereNotIn('class_id', $evaluationClassIDs)->delete();
+
+        return redirect()->route('evaluations.show', $evaluation->id)->with('alert-success', 'saved');
     }
 
     /**

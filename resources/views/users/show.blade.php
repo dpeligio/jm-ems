@@ -11,8 +11,10 @@
                 <div class="row">
                     <div class="col">
                         @if($user->is_verified == 0)
-                        <label>School ID:</label><br>
-                        <img class="img-thumbnail" src="{{ asset($user->schoolID_image()) }}" alt="">
+                            @isset($user->student->id)
+                            <label>School ID:</label><br>
+                            <img class="img-thumbnail" src="{{ asset($user->schoolID_image()) }}" alt="">
+                            @endif
                         @endif
                         <label>Role:</label>
                         {{ $user->role->role->name }}

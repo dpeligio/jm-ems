@@ -129,9 +129,13 @@ Route::group(array('middleware'=>['auth']), function() {
 	Route::resource('evaluation_classes', 'EvaluationClassesController')->parameters([
 		'evaluation_classes' => 'evaluationClasses'
 	]);
+	// restore
+	Route::post('evaluation_classes_restore/{evaluationClasses}', [
+		'as' => 'evaluation_classes.restore',
+		'uses' => 'EvaluationClassesController@restore'
+	]);
 	Route::get('evaluation_class/export/', 'EvaluationClassesController@export')->name('evaluation_classes.export');
 	Route::get('evaluation_class/send_email/{evaluationClasses}', 'EvaluationClassesController@mailToFaculty')->name('evaluation_classes.send_email');
-	// restore
 	/* Route::post('evaluation_students_restore/{evaluationStudent}', [
 		'as' => 'evaluation_students.restore',
 		'uses' => 'EvaluationStudentController@restore'
@@ -150,14 +154,27 @@ Route::group(array('middleware'=>['auth']), function() {
 	/**
 	 * Classes
 	 */
-	Route::resource('classes', 'ClassesController');
+	Route::resource('classes', 'ClassesController')->parameters([
+		'classes' => 'classes'
+	]);
 	// restore
-	Route::post('classes_restore/{class}', [
+	Route::post('classes_restore/{classes}', [
 		'as' => 'classes.restore',
 		'uses' => 'ClassesController@restore'
 	]);
+	Route::get('classes_set_active/{classes}', 'ClassesController@setActive')->name('classes.set_active');
+	Route::get('classes_set_inactive/{classes}', 'ClassesController@setInactive')->name('classes.set_inactive');
 
-	
+	/**
+	 * Class Students
+	 */
+	Route::resource('class_students', 'ClassStudentController')->parameters([
+		'class_students' => 'classStudent'
+	]);
+	Route::post('class_students_restore/{classStudent}', [
+		'as' => 'class_students.restore',
+		'uses' => 'ClassStudentController@restore'
+	]);
 });
 /**	
  * Dev

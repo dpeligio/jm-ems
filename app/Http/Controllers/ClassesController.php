@@ -55,7 +55,7 @@ class ClassesController extends Controller
     {
         $request->validate([
             'faculty' => 'required',
-            // 'section' => 'required',
+            'students' => 'required',
         ]);
 
         $class = Classes::create([
@@ -88,7 +88,8 @@ class ClassesController extends Controller
      */
     public function show(Classes $classes)
     {
-        //
+        $class = $classes;
+        return view('classes.show', compact('class'));
     }
 
     /**
@@ -99,7 +100,18 @@ class ClassesController extends Controller
      */
     public function edit(Classes $classes)
     {
-        //
+        if(request()->ajax()){
+            $data = [
+                'courses' => Course::get(),
+                'faculties' => Faculty::get(),
+                'students' => Student::get(),
+                'class' => $classes,
+                'classStudentIDs' => $classes->students->pluck('student_id')->toArray(),
+            ];
+            return response()->json([
+                'modal_content' => view('classes.edit', $data)->render()
+            ]);
+        }
     }
 
     /**
@@ -111,7 +123,38 @@ class ClassesController extends Controller
      */
     public function update(Request $request, Classes $classes)
     {
-        //
+        $request->validate([
+            'faculty' => 'required',
+            'students' => 'required',
+        ]);
+
+        $classes->update([
+            'course_id'=> $request->get('course'),
+            'faculty_id'=> $request->get('faculty'),
+            'section'=> $request->get('section'),
+            'school_year'=> $request->get('school_year'),
+            'schedule'=> $request->get('schedule'),
+        ]);
+
+        $selectedStudentIDs = [];
+        if($request->get('students')){
+            foreach($request->get('students') as $studentID){
+                $query = ClassStudent::where([
+                    ['class_id', $classes->id],
+                    ['student_id', $studentID],
+                ])->doesntExist();
+                if($query){
+                    ClassStudent::create([
+                        'class_id' => $classes->id,
+                        'student_id' => $studentID,
+                    ]);
+                }
+                $selectedStudentIDs[] = $studentID;
+            }
+        }
+        ClassStudent::where('class_id', $classes->id)->whereNotIn('student_id', $selectedStudentIDs)->delete();
+
+        return redirect()->route('classes.show', $classes->id)->with('alert-success', 'Saved');
     }
 
     /**

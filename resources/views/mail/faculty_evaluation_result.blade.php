@@ -8,7 +8,7 @@
         Dear Ma'am/Sir,
     </p>
     <p>
-        The Online Faculty Evaluation was done. Just click the file to download and view the results.
+        The Online Faculty Evaluation was done. Download/View the attached file to view the results.
     </p>
     {{-- <p>
         <a href="{{ route('website', ['id'=>1]) }}" role="buitton" class="href"></a>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
+use Auth;
 
 class Classes extends Model
 {
@@ -34,6 +35,9 @@ class Classes extends Model
     
     public function students()
     {
+        if(Auth::user()->hasRole('System Administrator')){
+            return $this->hasMany('App\Models\ClassStudent', 'class_id')->withTrashed();
+        }
         return $this->hasMany('App\Models\ClassStudent', 'class_id');
     }
 

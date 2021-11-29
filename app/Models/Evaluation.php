@@ -45,6 +45,9 @@ class Evaluation extends Model
 
     public function evaluationClasses()
     {
+        if(Auth::user()->hasrole('System Administrator')){
+            return $this->hasMany('App\Models\EvaluationClasses', 'evaluation_id')->withTrashed();
+        }
         return $this->hasMany('App\Models\EvaluationClasses', 'evaluation_id');
     }
 
