@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classes;
+use App\Models\ClassStudent;
+use App\Models\Course;
+use App\Models\Faculty;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class ClassesController extends Controller
@@ -14,7 +18,12 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        //
+        $classes = Classes::select('*');
+        $data = [
+            'classes' => $classes->get()
+        ];
+
+        return view('classes.index', $data);
     }
 
     /**
@@ -24,7 +33,16 @@ class ClassesController extends Controller
      */
     public function create()
     {
-        //
+        if(request()->ajax()){
+            $data = [
+                'courses' => Course::get(),
+                'faculties' => Faculty::get(),
+                'students' => Student::get(),
+            ];
+            return response()->json([
+                'modal_content' => view('classes.create', $data)->render()
+            ]);
+        }
     }
 
     /**
@@ -35,7 +53,31 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'faculty' => 'required',
+            // 'section' => 'required',
+        ]);
+
+        $class = Classes::create([
+            'is_active'=> true,
+            'course_id'=> $request->get('course'),
+            'faculty_id'=> $request->get('faculty'),
+            'section'=> $request->get('section'),
+            'school_year'=> $request->get('school_year'),
+            'schedule'=> $request->get('schedule'),
+        ]);
+
+        if($request->get('students')){
+            foreach($request->get('students') as $studentID){
+                ClassStudent::create([
+                    'class_id' => $class->id,
+                    'student_id' => $studentID,
+                ]);
+            }
+        }
+
+        return redirect()->route('classes.index')->with('alert-success', 'Saved');
+
     }
 
     /**
@@ -79,7 +121,35 @@ class ClassesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Classes $classes)
+	{
+		if (request()->get('permanent')) {
+			$classes->forceDelete();
+		}else{
+			$classes->delete();
+		}
+		return redirect()->route('classes.index')->with('alert-danger','Deleted');
+	}
+
+	public function restore($classes)
+	{
+		$classes = Classes::withTrashed()->find($classes);
+		$classes->restore();
+		return redirect()->route('classes.index')->with('alert-success','Restored');
+    }
+
+    public function setActive(Classes $classes)
     {
-        //
+        $classes->update([
+            'is_active' => false
+        ]);
+        return redirect()->route('classes.index')->with('alert-success', 'Saved');
+    }
+
+    public function setInactive(Classes $classes)
+    {
+        $classes->update([
+            'is_active' => true
+        ]);
+        return redirect()->route('classes.index')->with('alert-success', 'Saved');
     }
 }

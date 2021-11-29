@@ -27,7 +27,7 @@
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<script src="{{ asset('AdminLTE-3.1.0/plugins/chart.js/Chart.bundle.js') }}"></script>
+<script src="{{ asset('AdminLTE-3.1.0/plugins/chart.js/Chart.bundle.custom.js') }}"></script>
 {{-- <script src=https://cdnjs.cloudflare.com/ajax/libs/echarts/4.0.2/echarts-en.min.js charset=utf-8></script> --}}
 
 <script>

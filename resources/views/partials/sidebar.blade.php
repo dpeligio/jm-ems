@@ -56,7 +56,7 @@
                     @can('evaluations.index')
                     <li class="nav-item">
                         <a href="{{ route('evaluations.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-vote-yea"></i>
+                            <i class="nav-icon fas fa-poll-people"></i>
                             <p>
                                 Evaluations
                             </p>
@@ -66,7 +66,7 @@
                     @can('students.index')
                     <li class="nav-item">
                         <a href="{{ route('students.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-users-class"></i>
+                            <i class="nav-icon fas fa-user-graduate"></i>
                             <p>
                                 Students
                             </p>
@@ -76,9 +76,39 @@
                     @can('faculties.index')
                     <li class="nav-item">
                         <a href="{{ route('faculties.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                            <i class="nav-icon fas fa-user-tie"></i>
                             <p>
                                 Faculties
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('classes.index')
+                    <li class="nav-item">
+                        <a href="{{ route('classes.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-users-class"></i>
+                            <p>
+                                Classes
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('courses.index')
+                    <li class="nav-item">
+                        <a href="{{ route('courses.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-book"></i>
+                            <p>
+                                Courses
+                            </p>
+                        </a>
+                    </li>
+                    @endcan
+                    @can('departments.index')
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-network-wired"></i>
+                            <p>
+                                Departments
                             </p>
                         </a>
                     </li>

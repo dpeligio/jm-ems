@@ -61,6 +61,16 @@ Route::group(array('middleware'=>['auth']), function() {
 	]);
 
 	/**
+	 * Department
+	 */
+	Route::resource('departments', 'DepartmentController');
+	// restore
+	Route::post('departments_restore/{department}', [
+		'as' => 'departments.restore',
+		'uses' => 'DepartmentController@restore'
+	]);
+
+	/**
 	 * Faculty
 	 */
 	/* Route::resource('faculties', 'Configuration\FacultyController')->parameters([
@@ -112,6 +122,41 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'evaluation_students.restore',
 		'uses' => 'EvaluationStudentController@restore'
 	]); */
+
+	/**
+	 * Evaluation Classes
+	 */
+	Route::resource('evaluation_classes', 'EvaluationClassesController')->parameters([
+		'evaluation_classes' => 'evaluationClasses'
+	]);
+	Route::get('evaluation_class/export/', 'EvaluationClassesController@export')->name('evaluation_classes.export');
+	Route::get('evaluation_class/send_email/{evaluationClasses}', 'EvaluationClassesController@mailToFaculty')->name('evaluation_classes.send_email');
+	// restore
+	/* Route::post('evaluation_students_restore/{evaluationStudent}', [
+		'as' => 'evaluation_students.restore',
+		'uses' => 'EvaluationStudentController@restore'
+	]); */
+
+	/**
+	 * Courses
+	 */
+	Route::resource('courses', 'CourseController');
+	// restore
+	Route::post('courses_restore/{course}', [
+		'as' => 'courses.restocoursesre',
+		'uses' => 'CourseController@restore'
+	]);
+
+	/**
+	 * Classes
+	 */
+	Route::resource('classes', 'ClassesController');
+	// restore
+	Route::post('classes_restore/{class}', [
+		'as' => 'classes.restore',
+		'uses' => 'ClassesController@restore'
+	]);
+
 	
 });
 /**	

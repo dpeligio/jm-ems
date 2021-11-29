@@ -16,13 +16,27 @@
                                 <label>Title:</label>
                                 <input class="form-control" type="text" name="title" required>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Faculty:</label>
                                 <select class="form-control select2" name="faculties[]" multiple required>
                                     <option></option>
                                     @foreach ($faculties as $faculty)
                                         <option value="{{ $faculty->id }}">
                                             {{ $faculty->getFacultyName() }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div> --}}
+                            <div class="form-group">
+                                <label>Classes:</label>
+                                <select class="form-control select2" name="classes[]" multiple required>
+                                    <option></option>
+                                    @foreach ($classes as $class)
+                                        <option value="{{ $class->id }}">
+                                            {{ $class->course->course_code }} - 
+                                            {{ $class->section }}
+                                            {{ $class->title }}
+                                            (Faculty: {{ $class->faculty->fullname('') }})
                                         </option>
                                     @endforeach
                                 </select>

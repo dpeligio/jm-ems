@@ -6,11 +6,11 @@
             <div class="col-sm-6">
                 <h1 class="m-0">Evaluations</h1>
             </div>
-            <div class="col-sm-6 text-right">
+            {{-- <div class="col-sm-6 text-right">
                 @can('evaluations.create')
                     <button class="btn btn-default" type="button" data-toggle="modal-ajax" data-href="{{ route('evaluations.create') }}" data-target="#createEvaluation"><i class="fa fa-plus"></i> Add</button>
                 @endcan
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
@@ -18,6 +18,60 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
+                @if($facultyEvaluations->count() > 0)
+                <div class="col" id="accordion">
+                    @foreach ($facultyEvaluations->groupBy('evaluation_id') as $evaluationID => $facultyEvaluation)
+                    @php
+                        $evaluation = App\Models\Evaluation::find($evaluationID);
+                    @endphp
+                        <div class="card card-primary card-outline">
+                            <a class="d-block" data-toggle="collapse" href="#evaluation-{{ $evaluationID }}">
+                                <div class="card-header d-flex p-0">
+                                    <h4 class="card-title p-3 text-dark">
+                                        {{ $evaluation->title }}
+                                        [{{ $evaluation->getStatus() }}]
+                                        @if($evaluation->trashed())
+                                        <strong class="text-danger">
+                                            [DELETED]
+                                        </strong>
+                                        @endif
+                                    </h4>
+                                </div>
+                            </a>
+                            <div id="evaluation-{{ $evaluationID }}" class="collapse show" data-parent="#accordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        @forelse($facultyEvaluation as $evaluationClass)
+                                            {{-- @if(Auth::user()->student->student->hasClass($evaluationClass->class_id)) --}}
+                                                <div class="col-lg-3 col-6">
+                                                    <div class="small-box bg-success">
+                                                        <div class="inner">
+                                                            <h3>
+                                                                {{ $evaluationClass->class->course->course_code }}
+                                                            </h3>
+                                                            <p>{{ $evaluationClass->class->course->title }}</p>
+                                                            <p>Section: {{ $evaluationClass->class->section }}</p>
+                                                        </div>
+                                                        <div class="icon">
+                                                            <i class="fa fa-book"></i>
+                                                        </div>
+                                                        <a href="{{ route('evaluation_classes.show', $evaluationClass->id) }}" class="small-box-footer">View Result <i class="fas fa-arrow-circle-right"></i></a>
+                                                    </div>
+                                                </div>
+                                            {{-- @endif --}}
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @else
+                <div class="alert alert-warning text-center">No Records yet</div>
+                @endif
+            </div>
+            {{-- <div class="col-lg-12">
                 @if($facultyEvaluations->count() > 0)
                 <div class="col" id="accordion">
                     @foreach ($facultyEvaluations as $facultyEvaluation)
@@ -33,26 +87,6 @@
                                         </strong>
                                         @endif
                                     </h4>
-                                    {{-- <ul class="nav nav-pills ml-auto p-2">
-                                        @if ($facultyEvaluation->trashed())
-                                            @can('evaluations.restore')
-                                            <li class="nav-item">
-                                                <a class="nav-link text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('evaluations.restore', $facultyEvaluation->id) }}"><i class="fad fa-download"></i> Restore</a>
-                                            </li>
-                                            @endcan
-                                        @else
-                                            @can('evaluations.destroy')
-                                            <li class="nav-item">
-                                                <a class="nav-link text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('evaluations.destroy', $facultyEvaluation->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
-                                            </li>
-                                            @endcan
-                                        @endif
-                                        @can('evaluations.edit')
-                                        <li class="nav-item">
-                                            <a class="nav-link text-primary" href="{{ route('evaluations.edit', $facultyEvaluation->id) }}"><i class="fad fa-edit"></i> Edit</a>
-                                        </li>
-                                        @endcan
-                                    </ul> --}}
                                 </div>
                             </a>
                             <div id="evaluation-{{ $facultyEvaluation->id }}" class="collapse @if($facultyEvaluation->evaluation->getStatus() == 'ongoing') show @endif" data-parent="#accordion">
@@ -66,7 +100,6 @@
                                                             <div class="card-header border-0">
                                                                 <div class="d-flex justify-content-between">
                                                                     <h5 class="card-title">{{ $question }}</h5>
-                                                                    {{-- <a href="javascript:void(0);">View Report</a> --}}
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
@@ -88,7 +121,7 @@
                 @else
                 <div class="alert alert-warning text-center">No Records yet</div>
                 @endif
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
@@ -101,7 +134,7 @@
 {{-- @foreach ($facultyEvaluationChartIDs as $facultyEvaluationChartIDs)
     {!! $facultyEvaluationChart[$facultyEvaluationChartIDs]->script() !!}
 @endforeach --}}
-@if($facultyEvaluations->count() > 0)
+{{-- @if($facultyEvaluations->count() > 0)
     @foreach ($facultyEvaluations as $facultyEvaluation)
         @foreach ($facultyEvaluation->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses)
                 {!! $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->script() !!}
@@ -114,6 +147,6 @@
             </script>
         @endforeach
     @endforeach
-@endif
+@endif --}}
    
 @endsection

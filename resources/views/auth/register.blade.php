@@ -15,10 +15,13 @@
 								<label>School ID <strong class="text-danger">*</strong></label>
 							</div>
 							<div class="col-sm-8">
-								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="customFile" name="school_id" accept="image/*">
-									<label class="custom-file-label" for="customFile">Choose file</label>
-								</div>
+								{{-- <div class="input-group">
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="exampleInputFile" name="school_id" accept="image/*">
+										<label class="custom-file-label" for="exampleInputFile">Choose file</label>
+									</div>
+								</div> --}}
+								<input type="file" name="school_id" accept="image/png, image/jpeg, image/jpg" required><br>
 								<i>upload a clear photo of your School ID for validation</i>
 							</div>
 						</div>
@@ -62,11 +65,11 @@
 							<label class="col-sm-4 col-form-label">Gender <strong class="text-danger">*</strong></label>
 							<div class="col-sm-8">
 								<div class="custom-control custom-radio">
-									<input class="custom-control-input" name="gender" type="radio" id="genderMale" value="male">
+									<input class="custom-control-input" name="gender" type="radio" id="genderMale" value="male" @if(old('gender') == 'male') checked @endif>
 									<label for="genderMale" class="custom-control-label">Male</label>
 								</div>
 								<div class="custom-control custom-radio">
-									<input class="custom-control-input" name="gender" type="radio" id="genderFemale" value="female">
+									<input class="custom-control-input" name="gender" type="radio" id="genderFemale" value="female" @if(old('gender') == 'female') checked @endif>
 									<label for="genderFemale" class="custom-control-label">Female</label>
 								</div>
 							</div>

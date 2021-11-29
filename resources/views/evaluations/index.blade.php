@@ -13,7 +13,6 @@
             </div>
         </div>
     </div>
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -26,7 +25,7 @@
                                 @endrole
                                 <th>Status</th>
                                 <th>Title</th>
-                                <th>Faculty</th>
+                                <th>Classes</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 @role('System Administrator')
@@ -40,14 +39,31 @@
                                 @role('System Administrator')
                                 <td>{{ $evaluation->id }}</td>
                                 @endrole
-                                <td>{{ $evaluation->getStatus() }}</td>
+                                <td>{!! $evaluation->getStatusBadge() !!}</td>
                                 <td>{{ $evaluation->title }}</td>
-                                <td>
+                                {{-- <td>
+                                    {{ $evaluation->class->faculty->fullname('') }}
+                                </td> --}}
+                                {{-- <td>
                                     @forelse($evaluation->evaluationFaculties as $faculty)
                                     {{ $faculty->faculty->getFacultyName() }}@if(!$loop->last), @endif
                                     @empty
                                     *** EMPTY ***
                                     @endforelse
+                                </td> --}}
+                                <td>
+                                    <ul>
+                                        @forelse($evaluation->evaluationClasses as $class)
+                                        <li>
+                                            {{ $class->class->course->course_code }} -
+                                            {{ $class->class->faculty->getFacultyName() }}@if(!$loop->last), @endif
+                                        </li>
+                                        @empty
+                                        <li>
+                                            *** EMPTY ***
+                                        </li>
+                                        @endforelse
+                                    </ul>
                                 </td>
                                 <td>{{ date('F d, Y h:iA', strtotime($evaluation->start_date)) }}</td>
                                 <td>{{ date('F d, Y h:iA', strtotime($evaluation->end_date)) }}</td>

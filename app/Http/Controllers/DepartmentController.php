@@ -14,7 +14,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $departments = Department::select('*');
+        $departments = $departments->get();
+        return view('departments.index', compact('departments'));
     }
 
     /**
@@ -24,7 +26,11 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        if(request()->ajax()){
+            return response()->json([
+                'modal_content' => view('departments.create')->render()
+            ]);
+        }
     }
 
     /**
@@ -35,7 +41,15 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'unique:departments,name'],
+        ]);
+
+        Department::create([
+            'name' => $request->get('name'),
+        ]);
+
+        return redirect()->route('departments.index')->with('alert-success', 'Saved');
     }
 
     /**
@@ -46,7 +60,11 @@ class DepartmentController extends Controller
      */
     public function show(Department $department)
     {
-        //
+        if(request()->ajax()){
+            return response()->json([
+                'modal_content' => view('departments.show', compact('department'))->render()
+            ]);
+        }
     }
 
     /**
@@ -57,7 +75,11 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        if(request()->ajax()){
+            return response()->json([
+                'modal_content' => view('departments.edit', compact('department'))->render()
+            ]);
+        }
     }
 
     /**
@@ -69,7 +91,15 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, Department $department)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'unique:departments,name,'.$department->name],
+        ]);
+
+        $department->update([
+            'name' => $request->get('name'),
+        ]);
+
+        return redirect()->route('departments.index')->with('alert-success', 'Saved');
     }
 
     /**
@@ -79,7 +109,19 @@ class DepartmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Department $department)
-    {
-        //
+	{
+		if (request()->get('permanent')) {
+			$department->forceDelete();
+		}else{
+			$department->delete();
+		}
+		return redirect()->route('departments.index')->with('alert-danger','Deleted');
+	}
+
+	public function restore($department)
+	{
+		$department = Department::withTrashed()->find($department);
+		$department->restore();
+		return redirect()->route('departments.index')->with('alert-success','Restored');
     }
 }

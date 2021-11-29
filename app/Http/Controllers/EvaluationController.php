@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Evaluation;
 use App\Models\EvaluationFaculty;
+use App\Models\EvaluationClasses;
 use App\Models\EvaluationStudent;
 use App\Models\EvaluationStudentResponse;
 use App\Models\Faculty;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Charts\EvaluationFacultyChart;
@@ -31,55 +33,58 @@ class EvaluationController extends Controller
             ];
             return view('evaluations.student_index', $data);
         }elseif(Auth::user()->hasrole('Faculty')){
-            $facultyEvaluationChart = [[]];
-            $facultyEvaluations = EvaluationFaculty::where([
-                ['faculty_id', Auth::user()->faculty->faculty_id],
-            ])->orderBy('created_at', 'DESC')->get();
-            foreach($facultyEvaluations as $facultyEvaluation){
+            $evaluationClassChart = [[]];
+            $facultyClassesIDs = Classes::where('faculty_id', Auth::user()->faculty->faculty_id)->get('id');
+            $facultyEvaluations = EvaluationClasses::whereIn('class_id', $facultyClassesIDs)->get();
+            // foreach($evaluations->get() as $evaluation){
+            /* foreach($facultyEvaluations->groupBy('evaluation_id') as $evaluationID => $facultyEvaluation){
                 $evaluationStudents = EvaluationStudent::where([
-                    ['evaluation_faculty_id', $facultyEvaluation->id]
+                    ['evaluation_class_id', $facultyEvaluation->id]
                 ])->get('id');
-
-                $evaluationStudentResponses = EvaluationStudentResponse::whereIn('evaluation_student_id', $evaluationStudents);
+                // $evaluationStudentResponses = EvaluationStudentResponse::whereIn('evaluation_student_id', $evaluationStudents);
                 // foreach($evaluationStudentResponses->get()->groupBy('question_id') as $questionID => $responses){
-                foreach($facultyEvaluation->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses){
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID] = new EvaluationFacultyChart;
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->height(250);
-                    $labels = ['strongly agree','agree','disagree','strongly disagree'];
-                    $answers = [];
-                    $finalAnswerCount = [];
-                    $finalLabels = [];
-                    foreach($labels as $label){
-                        $answers[$label] = 0;
+                if($evaluationStudents->count() > 0){
+                    foreach($facultyEvaluation->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses){
+                        $evaluationClassChart[$facultyEvaluation->id][$questionID] = new EvaluationFacultyChart;
+                        $evaluationClassChart[$facultyEvaluation->id][$questionID]->height(250);
+                        $labels = ['strongly agree','agree','disagree','strongly disagree'];
+                        $answers = [];
+                        $finalAnswerCount = [];
+                        $finalLabels = [];
+                        foreach($labels as $label){
+                            $answers[$label] = 0;
+                        }
+                        foreach($responses as $response){
+                            $answers[$response->answer] += 1;
+                        }
+                        foreach($labels as $label){
+                            $finalAnswerCount[] = $answers[$label];
+                            $finalLabels[] = $label;
+                        }
+                        $evaluationClassChart[$facultyEvaluation->id][$questionID]->labels($finalLabels);
+                        $evaluationClassChart[$facultyEvaluation->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor('#007bff')->color('#007bff');
+                        $evaluationClassChart[$facultyEvaluation->id][$questionID]->options([
+                            // 'min-height' => '250px',
+                            'scales' => [
+                                'yAxes' => [[
+                                    'ticks' => [
+                                        'stepSize' => 1,
+                                    ]
+                                ]],
+                                'xAxes' => [[
+                                    'gridLines' => [
+                                        'display' => true
+                                    ]
+                                ]]
+                            ]
+                        ]);
                     }
-                    foreach($responses as $response){
-                        $answers[$response->answer] += 1;
-                    }
-                    foreach($labels as $label){
-                        $finalAnswerCount[] = $answers[$label];
-                        $finalLabels[] = $label;
-                    }
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->labels($finalLabels);
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor('#007bff')->color('#007bff');
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->options([
-                        'scales' => [
-                            'yAxes' => [[
-                                'ticks' => [
-                                    'stepSize' => 1,
-                                ]
-                            ]],
-                            'xAxes' => [[
-                                'gridLines' => [
-                                    'display' => true
-                                ]
-                            ]]
-                        ]
-                    ]);
                 }
-            }
+            } */
+            // }
             $data = [
                 'facultyEvaluations' => $facultyEvaluations,
-                'facultyEvaluationChart' => $facultyEvaluationChart,
+                // 'evaluationClassChart' => $evaluationClassChart,
                 // 'evaluationChartIDs' => $evaluationChartIDs
             ];
             return view('evaluations.faculty_index', $data);
@@ -100,7 +105,8 @@ class EvaluationController extends Controller
     {
         if(request()->ajax()) {
             $data = [
-                'faculties' => Faculty::get()
+                'faculties' => Faculty::get(),
+                'classes' => Classes::get(),
             ];
 
             return response()->json([
@@ -119,7 +125,8 @@ class EvaluationController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'faculties' => 'required',
+            // 'faculties' => 'required',
+            'classes' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
@@ -144,7 +151,17 @@ class EvaluationController extends Controller
             'description' => $request->get('description'),
         ]);
 
-        if($request->get('faculties')) {
+        if($request->get('classes')) {
+            $classes = $request->get('classes');
+            foreach($classes as $class_id){
+                EvaluationClasses::create([
+                    'evaluation_id' => $evaluation->id,
+                    'class_id' => $class_id,
+                ]);
+            }
+        }
+
+        /* if($request->get('faculties')) {
             $faculties = $request->get('faculties');
             foreach($faculties as $faculty_id){
                 EvaluationFaculty::create([
@@ -152,7 +169,7 @@ class EvaluationController extends Controller
                     'faculty_id' => $faculty_id,
                 ]);
             }
-        }
+        } */
 
         return redirect()->route('evaluations.index')->with('alert-success', 'saved');
     }
@@ -165,56 +182,120 @@ class EvaluationController extends Controller
      */
     public function show(Evaluation $evaluation)
     {
-        $facultyEvaluationChart = [[]];
-        foreach($evaluation->evaluationFaculties as $facultyEvaluation){
-            $evaluationStudents = EvaluationStudent::where([
-                ['evaluation_faculty_id', $facultyEvaluation->id]
-            ])->get('id');
-
-            $evaluationStudentResponses = EvaluationStudentResponse::whereIn('evaluation_student_id', $evaluationStudents);
-            // foreach($evaluationStudentResponses->get()->groupBy('question_id') as $questionID => $responses){
-            if($evaluationStudents->count() > 0){
-                foreach($facultyEvaluation->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses){
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID] = new EvaluationFacultyChart;
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->height(250);
-                    // $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->minHeight(250);
-                    $labels = ['strongly agree','agree','disagree','strongly disagree'];
-                    $answers = [];
-                    $finalAnswerCount = [];
-                    $finalLabels = [];
-                    foreach($labels as $label){
-                        $answers[$label] = 0;
+        $evaluationClassChart = [];
+        $labelColors = [
+            'strongly agree' => '#28a745',
+            'agree' => '#20c997',
+            'disagree' => '#ffc107',
+            'strongly disagree' => '#fd7e14',
+        ];
+        $choices = ['strongly agree','agree','disagree','strongly disagree'];
+        // $labels = ['strongly agree','agree','disagree','strongly disagree'];
+        // $evaluationClassChart[$evaluationClass->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor(['#28a745', '#20c997', '#ffc107', '#fd7e14'])->color(['#28a745', '#20c997', '#ffc107', '#fd7e14']);
+        foreach($evaluation->evaluationClasses as $evaluationClass){
+            $evaluationClassChart[$evaluationClass->id] = new EvaluationFacultyChart;
+            $evaluationClassChart[$evaluationClass->id]->height(100);
+            $labels = [];
+            $countAnswers = [[]];
+            $stronglyAgree = [];
+            $agree = [];
+            $disagree = [];
+            $stronglyDisagree = [];
+            foreach($evaluationClass->evaluationStudentResponses()->groupBy('question') as $question => $responses){
+                $labels[] = $question;
+                // $labels[] = explode(" ",$question);
+            }
+            $evaluationClassChart[$evaluationClass->id]->labels($labels);
+            
+            foreach($evaluationClass->evaluationStudentResponses()->groupBy('question') as $question => $responses){
+                $answers = [];
+                foreach($choices as $choice){
+                    $answers[$choice] = 0;
+                }
+                foreach($responses as $response){
+                    $answers[$response->answer] += 1;
+                }
+                foreach($choices as $choice){
+                    switch ($choice) {
+                        case 'strongly agree':
+                            $stronglyAgree[] = $answers[$choice];
+                            break;
+                        case 'agree':
+                            $agree[] = $answers[$choice];
+                            break;
+                        case 'disagree':
+                            $disagree[] = $answers[$choice];
+                            break;
+                        case 'strongly disagree':
+                            $stronglyDisagree[] = $answers[$choice];
+                            break;
                     }
-                    foreach($responses as $response){
-                        $answers[$response->answer] += 1;
-                    }
-                    foreach($labels as $label){
-                        $finalAnswerCount[] = $answers[$label];
-                        $finalLabels[] = $label;
-                    }
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->labels($finalLabels);
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor('#007bff')->color('#007bff');
-                    $facultyEvaluationChart[$facultyEvaluation->id][$questionID]->options([
-                        // 'min-height' => '250px',
-                        'scales' => [
-                            'yAxes' => [[
-                                'ticks' => [
-                                    'stepSize' => 1,
-                                ]
-                            ]],
-                            'xAxes' => [[
-                                'gridLines' => [
-                                    'display' => true
-                                ]
-                            ]]
-                        ]
-                    ]);
                 }
             }
+            
+            $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Agree', 'bar', $stronglyAgree)->backgroundColor('#28a745')->color('#28a745');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Agree', 'bar', $agree)->backgroundColor('#20c997')->color('#20c997');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Disgree', 'bar', $disagree)->backgroundColor('#ffc107')->color('#ffc107');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Disgree', 'bar', $stronglyDisagree)->backgroundColor('#fd7e14')->color('#fd7e14');
+            /* $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Agree', 'bar', [1,2,3,4,5])->backgroundColor('#28a745')->color('#28a745');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Agree', 'bar', [6,7,8,9,10])->backgroundColor('#20c997')->color('#20c997');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Disgree', 'bar', [1,2,3,4,5])->backgroundColor('#ffc107')->color('#ffc107');
+            $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Disgree', 'bar', [1,2,3,4,5])->backgroundColor('#fd7e14')->color('#fd7e14'); */
+            $evaluationClassChart[$evaluationClass->id]->options([
+                'scales' => [
+                    'yAxes' => [[
+                        'ticks' => [
+                            'stepSize' => 1,
+                        ]
+                    ]],
+                    'xAxes' => [[
+                        'gridLines' => [
+                            'display' => true
+                        ]
+                    ]]
+                ]
+            ]);
         }
+        /* foreach($evaluation->evaluationClasses as $evaluationClass){
+            foreach($evaluationClass->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses){
+                $evaluationClassChart[$evaluationClass->id][$questionID] = new EvaluationFacultyChart;
+                $evaluationClassChart[$evaluationClass->id][$questionID]->height(250);
+                $labels = ['strongly agree','agree','disagree','strongly disagree'];
+                $answers = [];
+                $finalAnswerCount = [];
+                $finalLabels = [];
+                foreach($labels as $label){
+                    $answers[$label] = 0;
+                }
+                foreach($responses as $response){
+                    $answers[$response->answer] += 1;
+                }
+                foreach($labels as $label){
+                    $finalAnswerCount[] = $answers[$label];
+                    $finalLabels[] = $label;
+                }
+                $evaluationClassChart[$evaluationClass->id][$questionID]->labels($finalLabels);
+                $evaluationClassChart[$evaluationClass->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor('#007bff')->color('#007bff');
+                $evaluationClassChart[$evaluationClass->id][$questionID]->options([
+                    // 'min-height' => '250px',
+                    'scales' => [
+                        'yAxes' => [[
+                            'ticks' => [
+                                'stepSize' => 1,
+                            ]
+                        ]],
+                        'xAxes' => [[
+                            'gridLines' => [
+                                'display' => true
+                            ]
+                        ]]
+                    ]
+                ]);
+            }
+        } */
         $data = [
             'evaluation' => $evaluation,
-            'facultyEvaluationChart' => $facultyEvaluationChart,
+            'evaluationClassChart' => $evaluationClassChart,
             // 'evaluationChartIDs' => $evaluationChartIDs
         ];
         return view('evaluations.show', $data);

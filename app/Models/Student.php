@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
+use App\Models\ClassStudent;
 
 class Student extends Model
 {
@@ -24,12 +25,28 @@ class Student extends Model
         'address'
     ];
 
+    public function classes()
+    {
+        return $this->hasMany('App\Models\ClassStudent', 'student_id');
+    }
+
     public function section() {
         return $this->hasOne('App\Models\StudentSection', 'student_id');
     }
 
     public function user() {
         return $this->hasOne('App\Models\UserStudent', 'student_id');
+    }
+
+    public function hasClass($classID)
+    {
+        if(ClassStudent::where([
+            ['student_id', $this->id],
+            ['class_id', $classID],
+        ])->exists()){
+            return true;
+        }
+        return false;
     }
 
     public static function getStudentName()

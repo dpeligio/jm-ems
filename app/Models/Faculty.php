@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 use App\Models\EvaluationFaculty;
+use App\Models\EvaluationClasses;
+use App\Models\Classes;
 
 class Faculty extends Model
 {
@@ -53,6 +55,23 @@ class Faculty extends Model
     {
         return EvaluationFaculty::where(['faculty_id', $this->id]);
     }
+
+    public function hasClass($classID)
+    {
+        if(Classes::where([
+            ['id', $classID],
+            ['faculty_id', $this->id],
+        ])->exists()){
+            return true;
+        }
+        return false;
+    }
+
+    /* public function evaluations()
+    {
+        $classesID = Classes::where('faculty_id', $this->id)->get('id');
+        $evaluationClasses = EvaluationClasses::where('$classesID')
+    } */
     
     /** 
      * $format = 'f-m-l'

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 use Carbon\Carbon;
+use Auth;
 
 class Evaluation extends Model
 {
@@ -17,6 +18,7 @@ class Evaluation extends Model
     protected $fillable = [
         'title',
         'status',
+        'class_id',
         'faculty_id',
         'start_date',
         'end_date',
@@ -41,6 +43,16 @@ class Evaluation extends Model
         return $this->hasMany('App\Models\EvaluationFaculty', 'evaluation_id');
     }
 
+    public function evaluationClasses()
+    {
+        return $this->hasMany('App\Models\EvaluationClasses', 'evaluation_id');
+    }
+
+    public function class()
+    {
+        return $this->belongsTo('App\Models\Classes', 'class_id');
+    }
+
     public function getStatus()
     {
         $now = Carbon::now();
@@ -53,6 +65,24 @@ class Evaluation extends Model
         }
         elseif($this->end_date->lt($now)){
             $status = 'ended';
+        }
+        return $status;
+    }
+
+    public function getStatusBadge()
+    {
+        $status = $this->getStatus();
+        switch ($status) {
+            case 'incoming':
+                $status = '<span class="badge badge-warning">Incoming</span>';
+                break;
+            case 'ongoing':
+                $status = '<span class="badge badge-success">Ongoing</span>';
+                break;
+            case 'ended':
+                $status = '<span class="badge badge-primary">Ended</span>';
+                break;
+            
         }
         return $status;
     }

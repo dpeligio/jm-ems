@@ -10,6 +10,9 @@ use App\Models\User;
 use App\Models\UserStudent;
 use App\Models\FileAttachment;
 use App\Models\UserFileAttachment;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StudentRegistration;
+
 
 class StudentRegistrationController extends Controller
 {
@@ -26,7 +29,7 @@ class StudentRegistrationController extends Controller
             // 'contact_number' => ['unique:students,contact_number'],
             // 'student_id' => ['required', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
 		$student = Student::create([
@@ -75,6 +78,8 @@ class StudentRegistrationController extends Controller
             'user_id' => $user->id,
             'student_id' => $student->id
         ]);
+
+        Mail::to($user->email)->send(new StudentRegistration($user));
 
 		return back()->with('alert-success', 'Saved');
     }

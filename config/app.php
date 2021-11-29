@@ -183,6 +183,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         // ConsoleTVs\Charts\ChartsServiceProvider::class,
 
     ],
@@ -241,6 +242,7 @@ return [
          */
         // 'Chart' => ConsoleTVs\Charts\ChartsServiceProvider::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

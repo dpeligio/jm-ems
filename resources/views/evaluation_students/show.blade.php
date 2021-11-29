@@ -11,11 +11,11 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <img src="{{ asset($evaluationStudent->evaluationFaculty->faculty->avatar()) }}" alt="" class="img-thumbnail">
+                            <img src="{{ asset($evaluationStudent->evaluationClass->class->faculty->avatar()) }}" alt="" class="img-thumbnail">
                         </div>
                         <div class="form-group">
                             <label>Faculty:</label>
-                            {{ $evaluationStudent->evaluationFaculty->faculty->getFacultyName() }}
+                            {{ $evaluationStudent->evaluationClass->class->faculty->getFacultyName() }}
                         </div>
                     </div>
                     <div class="col-md-8">

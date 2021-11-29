@@ -1,6 +1,6 @@
 <form action="{{ route('evaluation_students.store') }}" method="POST" autocomplete="off">
     @csrf
-    <input type="hidden" name="evaluation_faculty" value="{{ $evaluation_faculty->id }}">
+    <input type="hidden" name="evaluation_class" value="{{ $evaluation_class->id }}">
     <div class="modal fade" id="createEvaluationStudent" data-backdrop="static" data-keyboard="false" tabindex="-1" faculty="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" faculty="document">
             <div class="modal-content">
@@ -14,11 +14,11 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <img src="{{ asset($evaluation_faculty->faculty->avatar()) }}" alt="" class="img-thumbnail">
+                                <img src="{{ asset($evaluation_class->class->faculty->avatar()) }}" alt="" class="img-thumbnail">
                             </div>
                             <div class="form-group">
                                 <label>Faculty:</label>
-                                {{ $evaluation_faculty->faculty->getFacultyName() }}
+                                {{ $evaluation_class->class->faculty->fullname('') }}
                             </div>
                         </div>
                         <div class="col-md-8">

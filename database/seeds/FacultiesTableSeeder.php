@@ -12,6 +12,16 @@ class FacultiesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Faculty::insert([
+            [
+                'faculty_id',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'gender',
+                'contact_number',
+                'address'
+            ],  
+        ]);
     }
 }

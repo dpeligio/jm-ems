@@ -13,8 +13,10 @@ class DepartmentsTableSeeder extends Seeder
     public function run()
     {
         Department::insert([
-            ['name' => 'College of Information Technology and Computer Science'],
-            ['name' => 'College of Information Technology and Computer Science'],
+            ['name' => 'College of Education'],
+            ['name' => 'College of Criminology'],
+            ['name' => 'College of Information Technology Education'],
+            ['name' => 'College of Information Business Administration'],
         ]);
     }
 }

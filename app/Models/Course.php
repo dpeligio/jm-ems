@@ -18,4 +18,9 @@ class Course extends Model
         'title',
         'description',
     ];
+
+    public function classes()
+    {
+        return $this->hasMany('App\Models\Classes', 'course_id');
+    }
 }

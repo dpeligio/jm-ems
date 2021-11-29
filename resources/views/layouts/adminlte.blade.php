@@ -56,9 +56,28 @@
         <link rel="stylesheet" href="{{ asset('AdminLTE-3.1.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <style>
+            .loader {
+                height: 100%;
+                position: fixed;
+                width: 100%;
+                z-index: 9999999;
+                background-color: #ffffff5c;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+            .loader svg {
+                -webkit-transform: translate(0, -50%);
+                -ms-transform: translate(0, -50%);
+                -o-transform: translate(0, -50%);
+                transform: translate(0, -50%);
+            }
+        </style>
         @yield('style')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+        @include('partials.loader')
         <div class="wrapper">
             <!-- Preloader -->
             {{-- <div class="preloader flex-column justify-content-center align-items-center">

@@ -14,15 +14,21 @@ class EvaluationStudent extends Model
     protected $table = 'evaluation_students';
 
     protected $fillable = [
-        'evaluation_faculty_id',
+        // 'evaluation_faculty_id',
+        'evaluation_class_id',
         'student_id',
         'positive_comments',
         'negative_comments',
     ];
 
-    public function evaluationFaculty()
+    /* public function evaluationFaculty()
     {
         return $this->belongsTo('App\Models\EvaluationFaculty', 'evaluation_faculty_id');
+    }
+     */
+    public function evaluationClass()
+    {
+        return $this->belongsTo('App\Models\EvaluationClasses', 'evaluation_class_id');
     }
 
     public function student()

@@ -7,6 +7,7 @@ use App\Models\EvaluationStudentResponse;
 use Illuminate\Http\Request;
 use App\Models\Faculty;
 use App\Models\EvaluationFaculty;
+use App\Models\EvaluationClasses;
 use App\Models\Question;
 use Auth;
 
@@ -30,9 +31,9 @@ class EvaluationStudentController extends Controller
     public function create()
     {
         if(request()->ajax()) {
-            $evaluationFacultyID = request()->get('evaluation_faculty_id');
+            $evaluationClassID = request()->get('evaluation_class_id');
             $data = [
-                'evaluation_faculty' => EvaluationFaculty::find($evaluationFacultyID),
+                'evaluation_class' => EvaluationClasses::find($evaluationClassID),
                 'questions' => Question::where('is_active', 1)->get()
             ];
             return response()->json([
@@ -50,11 +51,11 @@ class EvaluationStudentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'evaluation_faculty' => 'required',
+            'evaluation_class' => 'required',
             'question' => 'required'
         ]);
         $evaluationStudent = EvaluationStudent::create([
-            'evaluation_faculty_id' => $request->get('evaluation_faculty'),
+            'evaluation_class_id' => $request->get('evaluation_class'),
             'student_id' => Auth::user()->student->student_id,
             'positive_comments' => $request->get('positive_comments'),
             'negative_comments' => $request->get('negative_comments'),
