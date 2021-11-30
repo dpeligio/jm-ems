@@ -11,8 +11,10 @@ use App\Models\UserFaculty;
 use App\Models\UserStudent;
 use Carbon\Carbon;
 use Auth;
+use Image;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AccountVerified;
+use App\Mail\AccountActivatedMail;
+use App\Mail\AccountDeactivatedMail;
 
 class UserController extends Controller
 {
@@ -118,16 +120,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if(request()->ajax()){
+        /* if(request()->ajax()){
             $data = [
                 'user' => $user
             ];
             return response()->json([
                 'modal_content' => view('users.show', $data)->render()
             ]);
-        }else{
-            return redirect()->rotue('users.index');
-        }
+        } */
+        return view('users.show', compact('user'));
         
     }
 
@@ -139,7 +140,25 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = Role::select('*');
+		if(Auth::user()->hasrole('System Administrator')){
+			$roles = $roles;
+		}elseif(Auth::user()->hasrole('Administrator')){
+			$roles->where('id', '!=', 1)->get();
+		}else{
+			$roles->whereNotIn('id', [1,2]);
+        }
+
+		$data = [
+			'roles' => $roles->get(),
+			'user' => $user,
+		];
+
+		if(request()->ajax()){
+			return response()->json([
+				'modal_content' => view('users.edit', $data)->render()
+			]);
+		}
     }
 
     /**
@@ -151,7 +170,43 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+			'role' => ['required'],
+			'username' => ['required', 'string', 'max:255', 'unique:users,username,'.$user->id],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+        ]);
+
+		if($request->filled('password')){
+			$request->validate([
+				'password' => ['required', 'string', 'min:8', 'confirmed']
+			]);
+			$data = ([
+				'username' => $request->get('username'),
+				'email' => $request->get('email'),
+				'password' => Hash::make($request->get('password')),
+			]);
+		}else{
+			$data = ([
+				'username' => $request->get('username'),
+				'email' => $request->get('email'),
+			]);
+		}
+		$user->update($data);
+        
+        $user->assignRole($request->role);
+        
+        /* if($request->get('type') == 'student') {
+            UserStudent::create([
+                'user_id' => $user->id,
+                'student_id' => $request->get('user_id')
+            ]);
+        }else{
+            UserFaculty::create([
+                'user_id' => $user->id,
+                'faculty_id' => $request->get('user_id')
+            ]);
+        } */
+		return redirect()->route('users.show', $user->id)->with('alert-success', 'Saved');
     }
 
     /**
@@ -183,9 +238,25 @@ class UserController extends Controller
     
     public function activate(User $user)
     {
-        Mail::to($user->email)->send(new AccountVerified($user));
+        $password = base64_encode(time());
         $user->update([
-            'is_verified' => 1
+            'is_verified' => 1,
+            // 'is_first_login' => 1,
+            'password' => Hash::make($password),
+            'temp_password' => $password,
+        ]);
+        Mail::to($user->email)->send(new AccountActivatedMail($user));
+        return redirect()->route('users.index')->with('alert-success', 'saved');
+    }
+
+    public function deactivate(User $user)
+    {
+        Mail::to($user->email)->send(new AccountDeactivatedMail($user));
+        $user->update([
+            'is_verified' => 0,
+            // 'is_first_login' => 1,
+            'password' => Hash::make($password),
+            'temp_password' => null,
         ]);
         return redirect()->route('users.index')->with('alert-success', 'saved');
     }
@@ -193,5 +264,61 @@ class UserController extends Controller
     public function accountSettings(User $user)
     {
         return view('users.account_settings', compact('user'));
+    }
+
+    public function changeAvatar(Request $request, User $user)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+        $avatar= $request->file('image');
+        $thumbnailImage = Image::make($avatar);
+
+        $storagePath = 'images/user/avatar';
+        $fileName = $user->id . '_' . date('m-d-Y H.i.s') . '.' . $avatar->getClientOriginalExtension();
+        $myimage = $thumbnailImage->fit(500);
+        // Storage::disk('upload')->putFileAs('images/rooms', $request->file('image'), $fileName);
+        $myimage->save($storagePath . '/' .$fileName);
+        $user->update([
+            'avatar' => $fileName
+        ]);
+        /* $file = $request->file('image');
+        $fileName = $request->get('name') . '_' . date('m-d-Y H.i.s') . '.' . $file->getClientOriginalExtension();
+        Storage::disk('upload')->putFileAs('images/rooms', $request->file('image'), $fileName);
+        $user->update([
+            'image' => $fileName
+        ]); */
+        return redirect()->route('users.account_settings', $user->id)->with('alert-success', 'Avatar changed successfully');
+    }
+
+    public function changePassword(Request $request, User $user)
+    {
+        if(Auth::user()->hasrole('System Administrator')){
+            $request->validate([
+                'old_password' => 'required',
+                'new_password' => 'confirmed|min:8|different:old_password'
+            ]);
+            
+            $user->update([
+                'password' => Hash::make($request->get('new_password'))
+            ]);
+
+            return redirect()->route('users.account_settings', $user->id)->with('alert-success', 'Password changed successfully');
+        }else{
+            if(Hash::check($request->get('old_password'), $user->password)){
+                $request->validate([
+                    'old_password' => 'required',
+                    'new_password' => 'confirmed|min:8|different:old_password'
+                ]);
+                
+                $user->update([
+                    'password' => Hash::make($request->get('new_password'))
+                ]);
+    
+                return redirect()->route('users.account_settings', $user->id)->with('alert-success', 'Password changed successfully');
+            }else{
+                return redirect()->route('users.account_settings', $user->id)->with('alert-success', 'Incorrect old password');
+            }
+        }
     }
 }

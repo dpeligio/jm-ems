@@ -20,6 +20,7 @@ class Faculty extends Model
         'first_name',
         'middle_name',
         'last_name',
+        'suffix',
         'gender',
         'contact_number',
         'address'

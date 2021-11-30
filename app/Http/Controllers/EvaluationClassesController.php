@@ -8,10 +8,19 @@ use App\Charts\EvaluationClassChart;
 use App\Exports\EvaluationClassExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\FacultyEvaluationResult;
+use App\Mail\FacultyEvaluationResultMail;
 
 class EvaluationClassesController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:evaluation_classes.index', ['only' => ['index']]);
+		$this->middleware('permission:evaluation_classes.create', ['only' => ['create','store']]);
+		$this->middleware('permission:evaluation_classes.show', ['only' => ['show']]);
+		$this->middleware('permission:evaluation_classes.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:evaluation_classes.destroy', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -161,7 +170,7 @@ class EvaluationClassesController extends Controller
     {
         // $fileName = $evaluationClasses->id.'-'.$evaluationClasses->class->faculty->fullname('').'-'.$evaluationClasses->class->course->course_code.'.xlsx';
         // Excel::store(new EvaluationClassExport($evaluationClasses), $fileName, 'excel');
-        Mail::to($evaluationClasses->class->faculty->user->email)->send(new FacultyEvaluationResult($evaluationClasses));
+        Mail::to($evaluationClasses->class->faculty->user->email)->send(new FacultyEvaluationResultMail($evaluationClasses));
         return redirect()->route('evaluations.show', $evaluationClasses->evaluation_id);
     }
 }

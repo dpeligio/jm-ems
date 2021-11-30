@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\UserStudent;
-use App\Models\FileAttachment;
-use App\Models\UserFileAttachment;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\StudentRegistration;
+use App\Mail\StudentRegistrationMail;
 
 
 class StudentRegistrationController extends Controller
 {
+    public function registrationComplete()
+    {
+        return view('auth.registration_success');
+    }
     public function register(Request $request)
     {
         $request->validate([
@@ -72,19 +74,18 @@ class StudentRegistrationController extends Controller
             'file_attachment_id' => $file_attachment->id,
         ]); */
         
-        $uploadPath = 'File Attachments/School ID Validation/';
-        $file_attachment->update(['file_path' => $uploadPath]);
+        $uploadPath = 'images/user/uploads/';
         Storage::disk('upload')->putFileAs($uploadPath, $file, $fileName);
         $user->update([
-            'student_id_image' => $fileName
+            'school_id_image' => $fileName
         ]);
         UserStudent::create([
             'user_id' => $user->id,
             'student_id' => $student->id
         ]);
 
-        Mail::to($user->email)->send(new StudentRegistration($user));
+        Mail::to($user->email)->send(new StudentRegistrationMail($user));
 
-		return view('auth.registration_success')->with('alert-success', 'Saved');
+		return redirect()->route('registration_complete')->with('alert-success', 'Saved');
     }
 }

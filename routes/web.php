@@ -18,6 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
+Route::get('registration_complete', 'StudentRegistrationController@registrationComplete')->name('registration_complete');
+
 Route::get('/home', function(){
 	return redirect()->route('evaluations.index');
 })->name('home');
@@ -49,11 +51,10 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'users.account_settings',
 		'uses' => 'UserController@accountSettings'
 	]);
-	// activate user account
-	Route::get('user_activate/{user}', [
-		'as' => 'users.activate',
-		'uses' => 'UserController@activate'
-	]);
+	Route::put('change_avatar/{user}', 'UserController@changeAvatar')->name('users.change_avatar');
+	Route::put('change_password/{user}', 'UserController@changePassword')->name('users.change_password');
+	Route::get('user_activate/{user}', 'UserController@activate')->name('users.activate');
+	Route::get('user_deactivate/{user}', 'UserController@deactivate')->name('users.deactivate');
 	// restore
 	Route::post('users_restore/{user}', [
 		'as' => 'users.restore',

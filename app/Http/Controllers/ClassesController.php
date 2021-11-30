@@ -12,6 +12,15 @@ use Auth;
 
 class ClassesController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:classes.index', ['only' => ['index']]);
+		$this->middleware('permission:classes.create', ['only' => ['create','store']]);
+		$this->middleware('permission:classes.show', ['only' => ['show']]);
+		$this->middleware('permission:classes.edit', ['only' => ['edit','update', 'setActive', 'setInactive']]);
+		$this->middleware('permission:classes.destroy', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -13,6 +13,15 @@ use Auth;
 
 class EvaluationStudentController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:evaluation_students.index', ['only' => ['index']]);
+		$this->middleware('permission:evaluation_students.create', ['only' => ['create','store']]);
+		$this->middleware('permission:evaluation_students.show', ['only' => ['show']]);
+		$this->middleware('permission:evaluation_students.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:evaluation_students.destroy', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('avatar')->nullable();
-            $table->string('student_id_image')->nullable();
+            $table->string('school_id_image')->nullable();
             $table->boolean('is_verified')->nullable()->default(0);
             $table->string('username')->unique();
             $table->string('email')->unique();

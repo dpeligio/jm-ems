@@ -8,7 +8,7 @@
 </head>
 <body>
     <p>
-        This is to confirm that your account has been approved.                                      
+        This is to confirm that your account has been activated.                                      
         You may now <a href="{{ config('app.url') }}">login</a> to Online Faculty Evaluation Management of Golden West Colleges using the information below:
     </p>
     <p>

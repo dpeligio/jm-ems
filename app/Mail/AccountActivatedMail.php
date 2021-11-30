@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class AccountVerified extends Mailable
+class AccountActivatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class AccountVerified extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.account_verified');
+        return $this->subject('Account Activated')->view('mail.account_activated');
     }
 }

@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class ClassStudentController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		// $this->middleware('permission:class_students.index', ['only' => ['index']]);
+		// $this->middleware('permission:class_students.create', ['only' => ['create','store']]);
+		// $this->middleware('permission:class_students.show', ['only' => ['show']]);
+		// $this->middleware('permission:class_students.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:class_students.destroy', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -38,7 +38,7 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $user)
-                            <tr @unlessrole('System Administrator') @can('users.show') data-toggle="modal-ajax" data-target="#showUser" data-href="{{ route('users.show', $user->id) }}"  @endcan @else class="{{ $user->trashed() ? 'table-danger' : '' }}" @endunlessrole>
+                            <tr @unlessrole('System Administrator') @can('users.show') data-toggle="tr-link" data-href="{{ route('users.show', $user->id) }}"  @endcan @else class="{{ $user->trashed() ? 'table-danger' : '' }}" @endunlessrole>
                             @if(Auth::user()->hasrole('System Administrator'))
                             <td>
                                 {{ $user->id }}
@@ -63,7 +63,7 @@
                             <td>{{ $user->email }}</td>
                             @role('System Administrator')
                                 <td class="text-center">
-                                    <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showUser" data-href="{{ route('users.show',$user->id) }}"><i class="fad fa-file-user fa-lg"></i></a>
+                                    <a href="{{ route('users.show',$user->id) }}"><i class="fad fa-file-user fa-lg"></i></a>
                                     {{-- <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editUser" data-href="{{ route('users.edit',$user->id) }}"><i class="fad fa-edit fa-lg"></i></a> --}}
                                     @if ($user->trashed())
                                         <a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('users.restore', $user->id) }}"><i class="fad fa-download fa-lg"></i></a>

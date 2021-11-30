@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Golden West College'),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,8 +182,9 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
+        // Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
         // ConsoleTVs\Charts\ChartsServiceProvider::class,
 
     ],
@@ -200,7 +201,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -241,8 +241,9 @@ return [
          * My Providers
          */
         // 'Chart' => ConsoleTVs\Charts\ChartsServiceProvider::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        // 'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

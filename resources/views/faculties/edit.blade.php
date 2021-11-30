@@ -38,7 +38,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Last Name:</label><br>
-                                <input class="form-control" type="text" name="last_name" value="{{ $faculty->first_name }}" required>
+                                <input class="form-control" type="text" name="last_name" value="{{ $faculty->last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Suffix:</label><br>
+                                <input class="form-control" type="text" name="suffix" value="{{ $faculty->suffix }}">
                             </div>
                             <div class="form-group">
                                 <label>Gender:</label><br>

@@ -40,6 +40,10 @@
                                 <input class="form-control" type="text" name="last_name" required>
                             </div>
                             <div class="form-group">
+                                <label>Suffix:</label><br>
+                                <input class="form-control" type="text" name="suffix">
+                            </div>
+                            <div class="form-group">
                                 <label>Gender:</label><br>
                                 <div class="form-row">
                                     <div class="radio col-md-4">

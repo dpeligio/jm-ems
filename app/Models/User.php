@@ -24,6 +24,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'avatar',
+        'school_id_image',
         'is_verified',
         'username',
         'email',
@@ -71,17 +73,10 @@ class User extends Authenticatable
         }
     }
 
-    public function file_attachments()
+    public function schoolIDImage()
     {
-        return $this->hasMany('App\Models\UserFileAttachment', 'user_id');
-    }
-
-    public function schoolID_image()
-    {
-        foreach ($this->file_attachments as $file_attachment) {
-            if($file_attachment->file_attachment->subject == 'School ID validation'){
-                return $file_attachment->file_attachment->file_path.'/'.$file_attachment->file_attachment->file_name;
-            }
+        if(!is_null($this->school_id_image)){
+            return 'images/user/uploads/'.$this->school_id_image;
         }
         return 'images/no-image.png';
     }
@@ -90,8 +85,8 @@ class User extends Authenticatable
     {
 
         $avatar = 'images/'.$this->userInfo()->gender.'.jpg';
-        if(!is_null($this->image)){
-            $avatar = 'images/student/'.$this->image;
+        if(!is_null($this->avatar)){
+            $avatar = 'images/user/avatar/'.$this->avatar;
         }
         return $avatar;
     }

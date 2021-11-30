@@ -6,22 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
-class StudentRegistration extends Mailable
+class FacultyEvaluationResultMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        //
     }
 
     /**
@@ -31,10 +28,8 @@ class StudentRegistration extends Mailable
      */
     public function build()
     {
-        $data = [
-            'user' => $this->user
-        ];
-        return $this->subject('Registration')
-            ->view('mail.student_registration', $data);
+        return $this->subject('Evaluation Complete')
+        ->view('mail.faculty_evaluation_result')
+        ->attach(public_path().'/excel-exports/Riego, Carolina (CC101) 2021-11-29-09-45-22.xlsx');
     }
 }

@@ -24,42 +24,58 @@
         <div class="row">
             <div class="col-md-3">
                 <legend>Avatar</legend>
-                <div class="row">
-                    <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset($user->avatar()) }}" />
-                    <label class="btn btn-primary btn-block">
-                        Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" />
-                    </label>
-                </div>
+                <form action="{{ route('users.change_avatar', Auth::user()->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset($user->avatar()) }}" />
+                        <div class="btn-group btn-block">
+                            <label type="button" class="btn btn-primary">
+                                Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
+                            </label>
+                            <label type="button" class="btn btn-primary">
+                                Upload<input type="submit" style="display: none;" />
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
                 <legend>Change Password</legend>
-                <div class="form-group">
-                    <label for="old_password">Old Password</label>
-                    <input id="old_password" name="old_password" type="password" class="form-control {{ $errors->has('old_password') ? 'is-invalid' : '' }}" requred>
-                    @if($errors->has('old_password'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('old_password') }}
-                        </div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label for="new_password">New Password</label>
-                    <input id="new_password" name="new_password" type="password" class="form-control {{ $errors->has('new_password') ? 'is-invalid' : '' }}" requred>
-                    @if($errors->has('new_password'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('new_password') }}
-                        </div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label for="new_password_confirmation">Confirm New Password</label>
-                    <input id="new_password_confirmation" name="new_password_confirmation" type="password" class="form-control {{ $errors->has('new_password_confirmation') ? 'is-invalid' : '' }}" requred>
-                    @if($errors->has('new_password_confirmation'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('new_password_confirmation') }}
-                        </div>
-                    @endif
-                </div>
+                <form action="{{ route('users.change_password', Auth::user()->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label for="old_password">Old Password</label>
+                        <input id="old_password" name="old_password" type="password" class="form-control {{ $errors->has('old_password') ? 'is-invalid' : '' }}" required>
+                        @if($errors->has('old_password'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('old_password') }}
+                            </div>
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <input id="new_password" name="new_password" type="password" class="form-control {{ $errors->has('new_password') ? 'is-invalid' : '' }}" required>
+                        @if($errors->has('new_password'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('new_password') }}
+                            </div>
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password_confirmation">Confirm New Password</label>
+                        <input id="new_password_confirmation" name="new_password_confirmation" type="password" class="form-control {{ $errors->has('new_password_confirmation') ? 'is-invalid' : '' }}" required>
+                        @if($errors->has('new_password_confirmation'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('new_password_confirmation') }}
+                            </div>
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-block" type="submit">Save</button>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
                 <legend>Account Info</legend>
