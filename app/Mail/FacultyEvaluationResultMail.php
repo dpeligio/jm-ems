@@ -11,14 +11,18 @@ class FacultyEvaluationResultMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $evaluationClass;
+    public $filePath;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($evaluationClass, $filePath)
     {
-        //
+        $this->evaluationClass = $evaluationClass;
+        $this->filePath = $filePath;
     }
 
     /**
@@ -30,6 +34,6 @@ class FacultyEvaluationResultMail extends Mailable
     {
         return $this->subject('Evaluation Complete')
         ->view('mail.faculty_evaluation_result')
-        ->attach(public_path().'/excel-exports/Riego, Carolina (CC101) 2021-11-29-09-45-22.xlsx');
+        ->attach(public_path().'/'.$this->filePath);
     }
 }

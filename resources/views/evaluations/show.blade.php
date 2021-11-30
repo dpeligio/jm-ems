@@ -21,62 +21,30 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col" id="accordion">
-                @foreach ($evaluation->evaluationClasses as $index => $evaluationClass)
-                    <div class="card @if($evaluationClass->trashed()) card-danger @else card-primary @endif card-outline">
-                        <a class="d-block" data-toggle="collapse" href="#evaluation-{{ $evaluationClass->id }}">
-                            <div class="card-header d-flex p-0">
-                                <h4 class="card-title p-3 text-dark">
-                                    {{ $evaluationClass->class->faculty->fullname('') }} |
-                                    {{ $evaluationClass->class->course->course_code }} -
-                                    {{ $evaluationClass->class->course->title }}
-                                </h4>
-                                <ul class="nav nav-pills ml-auto p-2">
-                                    @can('evaluations.export')
-                                    <li class="nav-item">
-                                        <a class="nav-link text-primary" href="{{ route('evaluation_classes.export', ['evaluation_class_id' => $evaluationClass->id]) }}" target="_blank"><i class="fad fa-table"></i> Export Excel</a>
-                                    </li>
-                                    @endcan
-                                    @can('evaluations.send_email')
-                                    <li class="nav-item">
-                                        <a class="nav-link text-primary" href="{{ route('evaluation_classes.send_email', $evaluationClass->id) }}"><i class="fad fa-envelope"></i> Send Email</a>
-                                    </li>
-                                    @endcan
-                                    @if ($evaluationClass->trashed())
-                                        <a class="btn btn-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('evaluation_classes.restore', $evaluationClass->id) }}"><i class="fad fa-download"></i> Restore</a>
-                                    @else
-                                        <a class="btn btn-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('evaluation_classes.destroy', $evaluationClass->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
-                                    @endif
-                                </ul>
-                            </div>
-                        </a>
-                        <div id="evaluation-{{ $evaluationClass->id }}" class="collapse" data-parent="#accordion">
-                            <div class="card-body">
-                                <div class="position-relative mb-4">
-                                    <div class="row">
-                                        @if($evaluationClass->evaluationStudentResponses()->count() > 0)
-                                        <div class="col-md-12">
-                                            {!! $evaluationClassChart[$evaluationClass->id]->container() !!}
-                                        </div>
-                                        @else
-                                        <div class="col-md-12">
-                                            <div class="alert alert-warning text-center">No Records yet</div>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            @foreach ($evaluation->evaluationClasses as $evaluationClass)
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>
+                            {{ $evaluationClass->class->course->course_code }}
+                        </h3>
+                        <p>{{ $evaluationClass->class->course->title }}</p>
+                        <p>Section: {{ $evaluationClass->class->section }}</p>
                     </div>
-                @endforeach
+                    <div class="icon">
+                        <i class="fa fa-book"></i>
+                    </div>
+                    <a href="{{ route('evaluation_classes.show', $evaluationClass->id) }}" class="small-box-footer">View Result <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
             </div>
+            @endforeach
         </div>
     </div>
 </section>
 @endsection
 
 @section('script')
-@if($evaluation->evaluationClasses->count() > 0)
+{{-- @if($evaluation->evaluationClasses->count() > 0)
     
     @foreach ($evaluation->evaluationClasses as $evaluationClass)
         @if($evaluationClass->evaluationStudentResponses()->count() > 0)                 
@@ -86,6 +54,6 @@
             {!! $evaluationClassChart[$evaluationClass->id]->script() !!}
         @endif
     @endforeach
-@endif
+@endif --}}
    
 @endsection

@@ -86,6 +86,7 @@ Route::group(array('middleware'=>['auth']), function() {
 		'faculties' => 'faculty'
 	]); */
 	Route::resource('faculties', 'FacultyController');
+	Route::put('faculties_update_avatar/{faculty}', 'FacultyController@changeAvatar')->name('faculties.change_avatar');
 	// restore
 	Route::post('faculties_restore/{position}', [
 		'as' => 'faculties.restore',
@@ -96,6 +97,7 @@ Route::group(array('middleware'=>['auth']), function() {
 	 * Student
 	 */
 	Route::resource('students', 'StudentController');
+	Route::put('students_update_avatar/{student}', 'StudentController@changeAvatar')->name('students.change_avatar');
 	// restore
 	Route::post('students_restore/{position}', [
 		'as' => 'students.restore',
@@ -125,7 +127,9 @@ Route::group(array('middleware'=>['auth']), function() {
 	/**
 	 * Evaluation Student
 	 */
-	Route::resource('evaluation_students', 'EvaluationStudentController');
+	Route::resource('evaluation_students', 'EvaluationStudentController')->only([
+		'create', 'store', 'show'
+	]);
 	// restore
 	/* Route::post('evaluation_students_restore/{evaluationStudent}', [
 		'as' => 'evaluation_students.restore',
@@ -137,6 +141,8 @@ Route::group(array('middleware'=>['auth']), function() {
 	 */
 	Route::resource('evaluation_classes', 'EvaluationClassesController')->parameters([
 		'evaluation_classes' => 'evaluationClasses'
+	])->only([
+		'show', 'delete'
 	]);
 	// restore
 	Route::post('evaluation_classes_restore/{evaluationClasses}', [

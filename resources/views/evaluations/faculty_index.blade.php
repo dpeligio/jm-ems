@@ -48,11 +48,11 @@
                                                 <div class="col-lg-3 col-6">
                                                     <div class="small-box bg-success">
                                                         <div class="inner">
-                                                            <h3>
+                                                            <h4>
                                                                 {{ $evaluationClass->class->course->course_code }}
-                                                            </h3>
+                                                            </h4>
+                                                            <p>{{ $evaluationClass->class->section }}</p>
                                                             <p>{{ $evaluationClass->class->course->title }}</p>
-                                                            <p>Section: {{ $evaluationClass->class->section }}</p>
                                                         </div>
                                                         <div class="icon">
                                                             <i class="fa fa-book"></i>

@@ -12,6 +12,7 @@ use App\Models\UserFaculty;
 use App\Models\Section;
 use App\Models\FacultySection;
 use App\Models\Department;
+use Image;
 
 class FacultyController extends Controller
 {
@@ -191,7 +192,6 @@ class FacultyController extends Controller
 			$faculty->delete();
 		}
 		return back()->with('alert-danger','Deleted');
-		// return redirect()->route('users.index')->with('alert-danger','User successfully deleted');
 	}
 
 	public function restore($faculty)
@@ -199,6 +199,24 @@ class FacultyController extends Controller
 		$faculty = Faculty::withTrashed()->find($faculty);
 		$faculty->restore();
 		return back()->with('alert-success','Restored');
-		// return redirect()->route('users.index')->with('alert-success','User successfully restored');
-	}
+    }
+
+    public function changeAvatar(Request $request, Faculty $faculty)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+        $avatar= $request->file('image');
+        $thumbnailImage = Image::make($avatar);
+
+        $storagePath = 'images/faculty';
+        $fileName = $faculty->id . '_' . date('m-d-Y H.i.s') . '.' . $avatar->getClientOriginalExtension();
+        $myimage = $thumbnailImage->fit(500);
+        $myimage->save($storagePath . '/' .$fileName);
+        $faculty->update([
+            'image' => $fileName
+        ]);
+        return redirect()->route('faculties.show', $faculty->id)->with('alert-success', 'Saved');
+    }
+    
 }

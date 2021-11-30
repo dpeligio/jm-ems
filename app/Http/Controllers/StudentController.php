@@ -13,6 +13,7 @@ use App\Models\Section;
 use App\Models\StudentSection;
 use App\Models\FileAttachment;
 use App\Models\UserFileAttachment;
+use Image;
 
 class StudentController extends Controller
 {
@@ -288,5 +289,23 @@ class StudentController extends Controller
         ]);
 
 		return back()->with('alert-success', 'Saved');
+    }
+
+    public function changeAvatar(Request $request, Student $student)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+        $avatar= $request->file('image');
+        $thumbnailImage = Image::make($avatar);
+
+        $storagePath = 'images/student';
+        $fileName = $student->id . '_' . date('m-d-Y H.i.s') . '.' . $avatar->getClientOriginalExtension();
+        $myimage = $thumbnailImage->fit(500);
+        $myimage->save($storagePath . '/' .$fileName);
+        $student->update([
+            'image' => $fileName
+        ]);
+        return redirect()->route('students.show', $student->id)->with('alert-success', 'Avatar changed successfully');
     }
 }

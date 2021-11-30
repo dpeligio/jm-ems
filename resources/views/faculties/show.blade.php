@@ -28,7 +28,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <img src="{{ asset($faculty->avatar()) }}" class="img-thumbnail">
+                <form action="{{ route('faculties.change_avatar', $faculty->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <img id="img" width="100%" class="img-thumbnail" src="{{ asset($faculty->avatar()) }}" />
+                        <div class="btn-group btn-block">
+                            <label type="button" class="btn btn-primary">
+                                Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
+                            </label>
+                            <label type="button" class="btn btn-primary">
+                                Upload<input type="submit" style="display: none;" />
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
                 <label>Faculty ID: </label>
@@ -142,25 +156,27 @@
                             </thead>
                             <tbody>
                                 @forelse ($faculty->classes as $class)
-                                <tr @if($class->trashed()) class="table-danger" @endif>
+                                <tr @hasrole('System Administrator') @if($class->trashed()) class="table-danger" @endif @endhasrole >
                                     @hasrole('System Administrator')
                                     <td>
                                         {{ $class->id }}
                                     </td>
                                     @endhasrole
                                     <td>
-                                        {{ $class->class->section }}
+                                        {{ $class->section }}
                                     </td>
                                     <td>
-                                        {{ $class->class->course->course_code }} -
-                                        {{ $class->class->course->title }}
+                                        {{ $class->course->course_code }} -
+                                        {{ $class->course->title }}
                                     </td>
                                     <td>
-                                        @forelse($class->students as $student)
-                                            {{ $student->student->fullname('') }}@if(!$loop->last), @endif
-                                        @empty
-                                            *** EMPTY ***
-                                        @endforelse
+                                        <ul>
+                                            @forelse($class->students as $student)
+                                                <li>{{ $student->student->fullname('') }}</li>{{-- @if(!$loop->last), @endif --}}
+                                            @empty
+                                                *** EMPTY ***
+                                            @endforelse
+                                        </ul>
                                     </td>
                                 </tr>
                                 @empty
@@ -178,26 +194,46 @@
     </div>
 </section>
 @endsection
-@can('users.create')
-<script>
-    $(function(){
-        addUserCredentials()
-
-        $('#addUserAccount').on('change', function(){
+@section('script')
+    <script>
+        $(function(){
+            $('#upload').change(function(){
+                var input = this;
+                var url = $(this).val();
+                var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+                if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) 
+                {
+                    var reader = new FileReader();
+                    
+                    reader.onload = function (e) {
+                        $('#img').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
+    </script>
+    @can('users.create')
+    <script>
+        $(function(){
             addUserCredentials()
-        })
 
-        function addUserCredentials(){
-            if($('#addUserAccount').prop('checked')){
-                $('#userCredentials input').attr('disabled', false)
-                $('#userCredentials select').attr('disabled', false)
-                $('#userCredentials').css('display', 'block')
-            }else{
-                $('#userCredentials input').attr('disabled', true)
-                $('#userCredentials select').attr('disabled', true)
-                $('#userCredentials').css('display', 'none')
+            $('#addUserAccount').on('change', function(){
+                addUserCredentials()
+            })
+
+            function addUserCredentials(){
+                if($('#addUserAccount').prop('checked')){
+                    $('#userCredentials input').attr('disabled', false)
+                    $('#userCredentials select').attr('disabled', false)
+                    $('#userCredentials').css('display', 'block')
+                }else{
+                    $('#userCredentials input').attr('disabled', true)
+                    $('#userCredentials select').attr('disabled', true)
+                    $('#userCredentials').css('display', 'none')
+                }
             }
-        }
-    })
-</script>
-@endcan
+        })
+    </script>
+    @endcan
+    @endsection

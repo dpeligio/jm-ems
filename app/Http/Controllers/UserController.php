@@ -84,26 +84,30 @@ class UserController extends Controller
     {
         $request->validate([
 			'user_id' => ['required'],
-			'role' => ['required'],
 			'username' => ['required', 'string', 'max:255', 'unique:users,username'],
 			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-        
-		$user = User::create([
-			'username' => $request->get('username'),
-			'email' => $request->get('email'),
-			'password' => Hash::make($request->get('password')),
-        ]);
-        
-        $user->assignRole($request->role);
-        
+        $password = base64_encode(time());
         if($request->get('type') == 'student') {
+            $user = User::create([
+                'username' => $request->get('username'),
+                'email' => $request->get('email'),
+                'password' => Hash::make($pasword),
+                'temp_password' => $password,
+            ]);
+            $user->assignRole(4);
             UserStudent::create([
                 'user_id' => $user->id,
                 'student_id' => $request->get('user_id')
             ]);
         }else{
+            $user = User::create([
+                'username' => $request->get('username'),
+                'email' => $request->get('email'),
+                'password' => Hash::make($pasword),
+                'temp_password' => $password,
+            ]);
+            $user->assignRole(3);
             UserFaculty::create([
                 'user_id' => $user->id,
                 'faculty_id' => $request->get('user_id')

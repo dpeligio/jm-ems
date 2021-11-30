@@ -103,8 +103,8 @@
                     @auth
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
-                            <i class="fas fa-user"></i>
                             Account
+                            <i class="fas fa-caret-down"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             {{-- @can('users.account_settings') --}}
@@ -146,10 +146,10 @@
             <!-- /.control-sidebar -->
             <!-- Main Footer -->
             <footer class="main-footer">
-                <strong>Copyright &copy; 2014-2021 <a href="/">{{ config('app.name') }}</a>.</strong>
+                <strong>Copyright &copy; {{ date('Y') }} <a href="/">{{ config('app.name') }}</a>.</strong>
                 All rights reserved.
                 <div class="float-right d-none d-sm-inline-block">
-                    <b>Version</b> 3.1.0
+                    <b>Version</b> 1.2.0
                 </div>
             </footer>
         </div>

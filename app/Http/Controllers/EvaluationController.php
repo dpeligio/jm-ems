@@ -181,7 +181,7 @@ class EvaluationController extends Controller
      */
     public function show(Evaluation $evaluation)
     {
-        $evaluationClassChart = [];
+        $evaluationClassChart = [[]];
         $labelColors = [
             'strongly agree' => '#28a745',
             'agree' => '#20c997',
@@ -191,7 +191,7 @@ class EvaluationController extends Controller
         $choices = ['strongly agree','agree','disagree','strongly disagree'];
         // $labels = ['strongly agree','agree','disagree','strongly disagree'];
         // $evaluationClassChart[$evaluationClass->id][$questionID]->dataset('responses', 'bar', $finalAnswerCount)->backgroundColor(['#28a745', '#20c997', '#ffc107', '#fd7e14'])->color(['#28a745', '#20c997', '#ffc107', '#fd7e14']);
-        foreach($evaluation->evaluationClasses as $evaluationClass){
+        /* foreach($evaluation->evaluationClasses as $evaluationClass){
             $evaluationClassChart[$evaluationClass->id] = new EvaluationFacultyChart;
             $evaluationClassChart[$evaluationClass->id]->height(100);
             $labels = [];
@@ -236,10 +236,6 @@ class EvaluationController extends Controller
             $evaluationClassChart[$evaluationClass->id]->dataset('Agree', 'bar', $agree)->backgroundColor('#20c997')->color('#20c997');
             $evaluationClassChart[$evaluationClass->id]->dataset('Disgree', 'bar', $disagree)->backgroundColor('#ffc107')->color('#ffc107');
             $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Disgree', 'bar', $stronglyDisagree)->backgroundColor('#fd7e14')->color('#fd7e14');
-            /* $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Agree', 'bar', [1,2,3,4,5])->backgroundColor('#28a745')->color('#28a745');
-            $evaluationClassChart[$evaluationClass->id]->dataset('Agree', 'bar', [6,7,8,9,10])->backgroundColor('#20c997')->color('#20c997');
-            $evaluationClassChart[$evaluationClass->id]->dataset('Disgree', 'bar', [1,2,3,4,5])->backgroundColor('#ffc107')->color('#ffc107');
-            $evaluationClassChart[$evaluationClass->id]->dataset('Strongly Disgree', 'bar', [1,2,3,4,5])->backgroundColor('#fd7e14')->color('#fd7e14'); */
             $evaluationClassChart[$evaluationClass->id]->options([
                 'scales' => [
                     'yAxes' => [[
@@ -254,7 +250,7 @@ class EvaluationController extends Controller
                     ]]
                 ]
             ]);
-        }
+        } */
         /* foreach($evaluation->evaluationClasses as $evaluationClass){
             foreach($evaluationClass->evaluationStudentResponses()->groupBy('question_id') as $questionID => $responses){
                 $evaluationClassChart[$evaluationClass->id][$questionID] = new EvaluationFacultyChart;

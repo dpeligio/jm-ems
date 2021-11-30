@@ -84,18 +84,19 @@
                                             <div class="col-lg-3 col-6">
                                                 <div class="small-box @if($evaluationClass->isDone()) bg-success @else bg-warning @endif">
                                                     <div class="inner">
-                                                        <h3>
+                                                        <h4>
                                                             {{ $evaluationClass->class->course->course_code }}
                                                             {{-- @if($evaluationClass->isDone())
                                                             <i class="fa fa-check"></i>
                                                             @else
                                                             <i class="fa fa-times"></i>
                                                             @endif --}}
-                                                        </h3>
+                                                        </h4>
+                                                        <p>{{ $evaluationClass->class->section }}</p>
                                                         <p>{{ $evaluationClass->class->faculty->fullname('') }}</p>
                                                     </div>
                                                     <div class="icon">
-                                                        <img class="img-thumbnail" src="{{ asset($evaluationClass->class->faculty->avatar()) }}">
+                                                        <img class="img-thumbnail" width="100%" src="{{ asset($evaluationClass->class->faculty->avatar()) }}">
                                                     </div>
                                                     @if($evaluationClass->isDone())
                                                     <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showEvaluationStudent" data-href="{{ route('evaluation_students.show', $evaluationClass->studentResponseID()) }}" class="small-box-footer">View Response <i class="fas fa-arrow-circle-right"></i></a>

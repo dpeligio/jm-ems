@@ -15,6 +15,7 @@ class Faculty extends Model
     use Userstamps;
     
     protected $fillable = [
+        'image',
         'faculty_id',
         'department_id',
         'first_name',

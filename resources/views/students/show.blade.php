@@ -28,7 +28,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <img src="{{ asset($student->avatar()) }}" class="img-thumbnail">
+                <form action="{{ route('students.change_avatar', $student->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <img id="img" width="100%" class="img-thumbnail" src="{{ asset($student->avatar()) }}" />
+                        <div class="btn-group btn-block">
+                            <label type="button" class="btn btn-primary">
+                                Browse&hellip;<input value="" type="file" name="image" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
+                            </label>
+                            <label type="button" class="btn btn-primary">
+                                Upload<input type="submit" style="display: none;" />
+                            </label>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
                 <label>Student ID: </label>
@@ -86,6 +100,7 @@
                     @csrf
                     <input type="hidden" name="type" value="student">
                     <input type="hidden" name="user_id" value="{{ $student->id }}">
+                    <input type="hidden" name="username" value="{{ $student->student_id }}">
                     <div id="userCredentials">
                         {{-- <label>Role:</label><br>
                         <select class="form-control select2" name="role" required>
@@ -174,26 +189,46 @@
     </div>
 </section>
 @endsection
-@can('users.create')
-<script>
-    $(function(){
-        addUserCredentials()
-
-        $('#addUserAccount').on('change', function(){
+@section('script')
+    <script>
+        $(function(){
+            $('#upload').change(function(){
+                var input = this;
+                var url = $(this).val();
+                var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+                if (input.files && input.files[0]&& (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) 
+                {
+                    var reader = new FileReader();
+                    
+                    reader.onload = function (e) {
+                        $('#img').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
+    </script>
+    @can('users.create')
+    <script>
+        $(function(){
             addUserCredentials()
-        })
 
-        function addUserCredentials(){
-            if($('#addUserAccount').prop('checked')){
-                $('#userCredentials input').attr('disabled', false)
-                $('#userCredentials select').attr('disabled', false)
-                $('#userCredentials').css('display', 'block')
-            }else{
-                $('#userCredentials input').attr('disabled', true)
-                $('#userCredentials select').attr('disabled', true)
-                $('#userCredentials').css('display', 'none')
+            $('#addUserAccount').on('change', function(){
+                addUserCredentials()
+            })
+
+            function addUserCredentials(){
+                if($('#addUserAccount').prop('checked')){
+                    $('#userCredentials input').attr('disabled', false)
+                    $('#userCredentials select').attr('disabled', false)
+                    $('#userCredentials').css('display', 'block')
+                }else{
+                    $('#userCredentials input').attr('disabled', true)
+                    $('#userCredentials select').attr('disabled', true)
+                    $('#userCredentials').css('display', 'none')
+                }
             }
-        }
-    })
-</script>
-@endcan
+        })
+    </script>
+    @endcan
+@endsection

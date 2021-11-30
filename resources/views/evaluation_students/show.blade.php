@@ -63,8 +63,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Cancel</button>
-                <button class="btn btn-default text-success" type="submit"><i class="fas fa-save"></i> Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal-ajax">Close</button>
             </div>
         </div>
     </div>
